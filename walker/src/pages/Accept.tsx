@@ -1,12 +1,14 @@
-import styles from "./Login.module.css";
+import styles from "./CoOp.module.css";
 import logo from "../assets/logo.png";
 import { Link } from "react-router-dom";
 
-function Login(): JSX.Element {
+function Create(): JSX.Element {
     return (
         <div className={styles.container}>
             <img className={styles.logo} src={logo} alt="Walker logo" />
-            <h1 className="subheading">Login to Your Walker Account Here</h1>
+            <h1 className="subheading">
+                Received an Invite to Join a Co-Op? Create Your Account Here!
+            </h1>
             <form className={styles.form}>
                 <div>
                     <label className="form-field" htmlFor="email">
@@ -30,11 +32,33 @@ function Login(): JSX.Element {
                         name="password"
                     />
                 </div>
+                <div>
+                    <label className="form-field" htmlFor="name">
+                        Your Name
+                    </label>
+                    <input
+                        placeholder="Add text"
+                        type="text"
+                        id="name"
+                        name="name"
+                    />
+                </div>
+                <div>
+                    <label className="form-field" htmlFor="petName">
+                        Your Pet's Name
+                    </label>
+                    <input
+                        placeholder="Add text"
+                        type="text"
+                        id="petName"
+                        name="petName"
+                    />
+                </div>
             </form>
             <Link to="/co-op-home" className="btn">
-                Login
+                Create New Account
             </Link>
         </div>
     );
 }
-export default Login;
+export default Create;
