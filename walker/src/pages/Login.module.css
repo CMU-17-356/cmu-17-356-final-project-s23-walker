@@ -1,0 +1,31 @@
+.container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    width: 60%;
+    margin: 0 auto;
+    align-items: center;
+    padding: 15vh 0;
+    text-align: center;
+}
+
+.logo {
+    width: 20vw;
+}
+
+.form {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.form label {
+    padding-right: 2vw;
+}
+
+.form div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 2vh;
+}

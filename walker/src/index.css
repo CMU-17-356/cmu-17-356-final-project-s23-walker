@@ -21,16 +21,23 @@ code {
         monospace;
 }
 
-.heading {
+.heading,
+.subheading,
+.form-field {
     font-family: Bangers, "Helvetica Neue", Arial;
-    font-size: 101px;
     color: var(--primary-color);
+    text-transform: uppercase;
+}
+.heading {
+    font-size: 101px;
 }
 
 .subheading {
-    font-family: Bangers, "Helvetica Neue", Arial;
     font-size: 66px;
-    color: var(--primary-color);
+}
+
+.form-field {
+    font-size: 42px;
 }
 
 .btn {
@@ -41,4 +48,13 @@ code {
     text-decoration: none;
     min-width: 10vw;
     text-align: center;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"] {
+    border-radius: 10px;
+    padding: 2vh 1vw;
+    border: none;
+    font-size: 18px;
 }
