@@ -1,15 +1,15 @@
-import logo from './logo.svg';
-import './Home.css';
+import logo from "./logo.svg";
+import "./Home.css";
 
-function Home() {
+function Home(): JSX.Element {
     return (
         <div className="App">
-          <header className="App-header">
-            <img src={logo} className="App-logo" alt="logo" />
-            Walker
-          </header>
+            <header className="App-header">
+                <img src={logo} className="App-logo" alt="logo" />
+                Walker
+            </header>
         </div>
-      );
+    );
 }
 
-export default Home
+export default Home;
