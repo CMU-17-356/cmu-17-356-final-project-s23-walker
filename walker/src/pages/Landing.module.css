@@ -1,0 +1,17 @@
+.container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    width: 60%;
+    margin: 0 auto;
+    align-items: center;
+    padding-bottom: 15vh;
+    text-align: center;
+}
+.coop {
+    margin-top: 5vh;
+}
+
+.coop a:first-child {
+    margin-right: 2vw;
+}
