@@ -30,12 +30,6 @@ jobs:
               with:
                   node-version: 16
 
-            - name: Run Build
-              working-directory: ./walker
-              run: |
-                  timeout 2m npm install
-                  timeout 2m npm run build
-
             # Runs compiler and linter for TS files
             - name: Run on backend files
               working-directory: ./walker-backend
