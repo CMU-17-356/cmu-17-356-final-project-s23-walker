@@ -30,8 +30,9 @@ jobs:
               with:
                   node-version: 16
 
-            - name: Deploy frontend on GitHub Pages
+            - name: Deploy frontend to gh-pages
               working-directory: ./walker
-              run: |
-                  timeout 2m npm install 
-                  timeout 2m npm run deploy
+              uses: peaceiris/actions-gh-pages@v3
+              with:
+                  deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+                  publish_dir: ./build
