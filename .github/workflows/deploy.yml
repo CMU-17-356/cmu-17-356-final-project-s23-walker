@@ -31,7 +31,7 @@ jobs:
                   node-version: 16
 
             # Runs compiler and linter for TS files
-            - name: Deploy frontend
+            - name: Deploy frontend on GitHub pages
               working-directory: ./walker
               run: |
                   timeout 2m npm install 
