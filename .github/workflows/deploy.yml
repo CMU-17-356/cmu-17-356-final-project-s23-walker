@@ -36,6 +36,7 @@ jobs:
 
             # Build the React app
             - name: Build the React app
+              working-directory: ./walker
               run: npm run build
 
             - uses: peaceiris/actions-gh-pages@v3
