@@ -9,7 +9,7 @@ const port = 8080;
 
 // Handling '/' Request
 app.get('/', (_req, _res) => {
-  _res.send("Hello World");
+  _res.send("TypeScript with Express");
 });
 
 // Server setup
