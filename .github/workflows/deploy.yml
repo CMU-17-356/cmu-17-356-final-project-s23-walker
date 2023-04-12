@@ -1,0 +1,73 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Deploy
+
+# Controls when the workflow will run
+on:
+    push:
+        branches:
+            - master
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+    # This workflow contains a single job called "build"
+    frontend:
+        # The type of runner that the job will run on
+        runs-on: ubuntu-latest
+
+        # Steps represent a sequence of tasks that will be executed as part of the job
+        steps:
+            # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+            - uses: actions/checkout@v3
+              with:
+                  fetch-depth: 0
+
+            # Navigate into the 'walker' folder
+            - name: Navigate into the 'walker' folder
+              run: cd walker
+
+            # Checks-out Node
+            - uses: actions/setup-node@v3
+              with:
+                  node-version: 16
+
+            - name: Run Build
+              working-directory: ./walker
+              run: |
+                  timeout 2m npm install
+                  timeout 2m npm run build
+
+            - uses: peaceiris/actions-gh-pages@v3
+              with:
+                  deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+                  publish_dir: ./walker/build
+                  publish_branch: gh-pages
+    backend:
+        # The type of runner that the job will run on
+        runs-on: ubuntu-latest
+
+        # Steps represent a sequence of tasks that will be executed as part of the job
+        steps:
+            # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+            - uses: actions/checkout@v3
+              with:
+                  fetch-depth: 0
+
+            # Checks-out Node
+            - uses: actions/setup-node@v3
+              with:
+                  node-version: 16
+
+            - name: Compile TypeScript
+              working-directory: ./walker-backend
+              run: |
+                  timeout 2m npm install
+                  timeout 2m npx tsc
+
+            - uses: superfly/flyctl-actions/setup-flyctl@master
+
+            - name: Deploy Fly
+              working-directory: ./walker-backend
+              run: flyctl deploy --remote-only
+              env:
+                  FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
