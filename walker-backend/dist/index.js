@@ -11,7 +11,7 @@ const app = (0, express_1.default)();
 const port = 8080;
 // Handling '/' Request
 app.get('/', (_req, _res) => {
-    _res.send("TypeScript With Express");
+    _res.send("Hello World");
 });
 // Server setup
 app.listen(port, () => {
