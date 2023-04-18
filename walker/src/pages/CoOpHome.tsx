@@ -10,9 +10,21 @@ interface WalkerCall {
   request: string;
 }
 
+interface GroupMember {
+  dogOwnerName: string;
+  dogName: string;
+}
+
+
 const pendingWalkerCalls: WalkerCall[] = [
   { id: 1, petName: "Jeanie", job: "Walk", scheduledTime: new Date("2023-03-02T09:00:00"), request: "I'm working late, could Jeanie join someone on their afternoon walk please?" },
   { id: 2, petName: "Bruce", job: "Petsitting", scheduledTime: new Date("2023-04-19T11:00:00"), request: "I've got a weekend trp to Buffalo, could someone watch Bruce for the weekend?" }
+];
+
+const groupMembers: GroupMember[] = [
+  { dogOwnerName: "Rebecca", dogName: "Jeanie" },
+  { dogOwnerName: "Alex", dogName: "Bruce" },
+  { dogOwnerName: "Susanna", dogName: "Hubble" },
 ];
 
 function CoOpHome({ userName, petName, groupName }: { userName: string, petName: string, groupName: string }): JSX.Element {
@@ -42,7 +54,30 @@ function CoOpHome({ userName, petName, groupName }: { userName: string, petName:
             </li>
             ))}
           </ul>
-          <p className={"subheading"} style={{ fontSize: "36px" }}>Group Members</p>
+          <p className={"subheading"} style={{  marginBottom: "-10px", fontSize: "36px" }}>Group Members</p>
+          <ul  style={{ listStyleType: "none" }}>
+            {groupMembers.map((member, index) => (
+              <li key={index} style={{paddingRight: "20px" }}>
+                {member.dogOwnerName} & {member.dogName}
+              </li>
+            ))}
+          </ul>
+
+
+          <div>
+              <label className="subheading" htmlFor="email" style={{fontSize: "20px", marginRight:"20px"}}>
+                  Invite new group members via email:
+              </label>
+              <input
+                  placeholder="Add text"
+                  type="email"
+                  id="email"
+                  name="email"
+                  style={{height: "5px", width:"120px", marginRight: "20px"}}
+              />
+              <button className="btn" style={{ lineHeight:"0",height: "5px", display: "inline-block" }}>Invite Member</button>
+          </div>
+
         </div>
       </div>
     </div>
