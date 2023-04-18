@@ -1,3 +1,7 @@
+import React, { useState } from 'react';
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
+
 import styles from "./Landing.module.css";
 import logo from "../assets/logo.png";
 import { Link } from "react-router-dom";
@@ -27,7 +31,10 @@ const groupMembers: GroupMember[] = [
   { dogOwnerName: "Susanna", dogName: "Hubble" },
 ];
 
+
+
 function CoOpHome({ userName, petName, groupName }: { userName: string, petName: string, groupName: string }): JSX.Element {
+  
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -54,6 +61,9 @@ function CoOpHome({ userName, petName, groupName }: { userName: string, petName:
             </li>
             ))}
           </ul>
+
+          <p className={"subheading"} style={{ fontSize: "36px" }}>Co-Op Calendar</p>
+
           <p className={"subheading"} style={{  marginBottom: "-10px", fontSize: "36px" }}>Group Members</p>
           <ul  style={{ listStyleType: "none" }}>
             {groupMembers.map((member, index) => (
