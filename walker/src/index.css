@@ -55,6 +55,7 @@ code {
     text-decoration: none;
     min-width: 10vw;
     text-align: center;
+    border: none;
 }
 
 input[type="text"],
