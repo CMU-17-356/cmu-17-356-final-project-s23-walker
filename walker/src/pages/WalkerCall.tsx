@@ -7,9 +7,16 @@ function WalkerCall(): JSX.Element {
         <div className={styles.container}>
             <img className={styles.logo} src={logo} alt="Walker logo" />
             <h1 className="subheading" style={{fontSize:"48px"}}>Create a new walker call request for pet care</h1>
-            <h1 className="subheading" style={{fontSize:"48px"}}>Type of Pet Care</h1>
-            <h1 className="subheading" style={{fontSize:"48px"}}>Date</h1>
-            <h1 className="subheading" style={{fontSize:"48px"}}>Details</h1>
+            
+            <div >
+            <h1 className="subheading" style={{fontSize:"36px", display: "inline-block", marginRight:"12px"}}>Type of Pet Care</h1>
+                <input type="checkbox" id="op1" name="walk" value="walk" />
+                <label htmlFor="walk"> Walk </label> 
+                <input type="checkbox" id="op2" name="petsitting" value="petsit" />
+                <label htmlFor="petsitting"> Petsitting </label>
+            </div>
+            <h1 className="subheading" style={{fontSize:"36px"}}>Date</h1>
+            <h1 className="subheading" style={{fontSize:"36px"}}>Details</h1>
             <button
                 className="btn"
                 style={{ display: "inline-block" }}
