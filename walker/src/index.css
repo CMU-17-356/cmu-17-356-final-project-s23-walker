@@ -9,7 +9,7 @@
     --fc-button-hover-color: #1f07b7;
     --fc-button-hover-bg-color: #351ec9;
     --fc-button-hover-border-color: #1f07b7;
-    --fc-border-color: #d0d0d0;
+    --fc-border-color: #8b8787;
 }
 
 body {
@@ -30,7 +30,8 @@ code {
 
 .heading,
 .subheading,
-.form-field {
+.form-field,
+.fc-toolbar-title {
     font-family: Bangers, "Helvetica Neue", Arial;
     color: var(--primary-color);
     text-transform: uppercase;
