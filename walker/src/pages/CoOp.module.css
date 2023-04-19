@@ -32,6 +32,8 @@
 
 .event {
     margin: 0px;
-    padding: 2px 5px;
+    padding: 4px 7px;
     overflow-x: scroll;
+    border-radius: 5px;
+    font-size: 15px;
 }

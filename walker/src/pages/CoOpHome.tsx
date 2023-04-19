@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 
@@ -12,6 +12,7 @@ interface WalkerCall {
     job: string;
     scheduledTime: Date;
     request: string;
+    accepted: boolean;
 }
 
 interface GroupMember {
@@ -19,11 +20,16 @@ interface GroupMember {
     dogName: string;
 }
 
+interface ExtendedProps {
+    accepted: boolean;
+}
+
 interface EventInfo {
     timeText: string;
     event: {
         title: string;
         start: Date;
+        extendedProps: ExtendedProps;
     };
 }
 
@@ -35,6 +41,7 @@ const pendingWalkerCalls: WalkerCall[] = [
         scheduledTime: new Date("2023-03-02T09:00:00"),
         request:
             "I'm working late, could Jeanie join someone on their afternoon walk please?",
+        accepted: true,
     },
     {
         id: 2,
@@ -43,15 +50,21 @@ const pendingWalkerCalls: WalkerCall[] = [
         scheduledTime: new Date("2023-04-19T11:00:00"),
         request:
             "I've got a weekend trp to Buffalo, could someone watch Bruce for the weekend?",
+        accepted: false,
     },
 ];
 
-const events = pendingWalkerCalls.map(({ petName, job, scheduledTime }) => {
-    return {
-        title: `${petName} - ${job}`,
-        start: scheduledTime,
-    };
-});
+const events = pendingWalkerCalls.map(
+    ({ petName, job, scheduledTime, accepted }) => {
+        return {
+            title: `${petName} - ${job}`,
+            start: scheduledTime,
+            extendedProps: {
+                accepted,
+            },
+        };
+    }
+);
 
 const groupMembers: GroupMember[] = [
     { dogOwnerName: "Rebecca", dogName: "Jeanie" },
@@ -189,7 +202,15 @@ function CoOpHome({
 // a custom render function
 function renderEventContent(eventInfo: EventInfo) {
     return (
-        <p className={styles.event}>
+        <p
+            style={{
+                color: eventInfo.event.extendedProps.accepted ? "green" : "red",
+                border: `1px solid ${
+                    eventInfo.event.extendedProps.accepted ? "green" : "red"
+                }`,
+            }}
+            className={styles.event}
+        >
             {eventInfo.timeText} <b>{eventInfo.event.title}</b>
         </p>
     );
