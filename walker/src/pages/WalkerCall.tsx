@@ -6,34 +6,17 @@ function WalkerCall(): JSX.Element {
     return (
         <div className={styles.container}>
             <img className={styles.logo} src={logo} alt="Walker logo" />
-            <h1 className="subheading">Login to Your Walker Account Here</h1>
-            <form className={styles.form}>
-                <div>
-                    <label className="form-field" htmlFor="email">
-                        Email
-                    </label>
-                    <input
-                        placeholder="Add text"
-                        type="email"
-                        id="email"
-                        name="email"
-                    />
-                </div>
-                <div>
-                    <label className="form-field" htmlFor="password">
-                        Password
-                    </label>
-                    <input
-                        placeholder="Add text"
-                        type="password"
-                        id="password"
-                        name="password"
-                    />
-                </div>
-            </form>
-            <Link to="/co-op-home" className="btn">
-                Login
-            </Link>
+            <h1 className="subheading" style={{fontSize:"48px"}}>Create a new walker call request for pet care</h1>
+            <h1 className="subheading" style={{fontSize:"48px"}}>Type of Pet Care</h1>
+            <h1 className="subheading" style={{fontSize:"48px"}}>Date</h1>
+            <h1 className="subheading" style={{fontSize:"48px"}}>Details</h1>
+            <button
+                className="btn"
+                style={{ display: "inline-block" }}
+            >
+                Send Out the Walker Call
+            </button>
+        
         </div>
     );
 }
