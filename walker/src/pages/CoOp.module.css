@@ -29,3 +29,11 @@
     align-items: center;
     padding-bottom: 2vh;
 }
+
+.event {
+    margin: 0px;
+    padding: 4px 7px;
+    overflow-x: scroll;
+    border-radius: 5px;
+    font-size: 15px;
+}
