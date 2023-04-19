@@ -29,3 +29,9 @@
     align-items: center;
     padding-bottom: 2vh;
 }
+
+.event {
+    margin: 0px;
+    padding: 2px 5px;
+    overflow-x: scroll;
+}
