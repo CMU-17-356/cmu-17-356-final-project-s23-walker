@@ -7,6 +7,9 @@ on:
     push:
         branches:
             - master
+    pull_request:
+        branches:
+            - master
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -35,7 +38,7 @@ jobs:
               working-directory: ./walker
               run: |
                   timeout 2m npm install
-                  timeout 2m npm run build
+                  timeout 2m CI=false npm run build
 
             - uses: peaceiris/actions-gh-pages@v3
               with:
