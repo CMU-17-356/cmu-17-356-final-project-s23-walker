@@ -38,7 +38,9 @@ jobs:
               working-directory: ./walker
               run: |
                   timeout 2m npm install
-                  timeout 2m CI=false npm run build
+                  timeout 2m npm run build
+              env:
+                  CI: false
 
             - uses: peaceiris/actions-gh-pages@v3
               with:
