@@ -16,7 +16,19 @@ function WalkerCall(): JSX.Element {
                 <label htmlFor="petsitting"> Petsitting </label>
             </div>
             <h1 className="subheading" style={{fontSize:"36px"}}>Date</h1>
-            <h1 className="subheading" style={{fontSize:"36px"}}>Details</h1>
+            <div >
+            <h1 className="subheading" style={{fontSize:"36px", display: "inline-block", marginRight: "12px"}}>Details</h1>
+            <input
+                            placeholder="Add text"
+                            type="request"
+                            id="request"
+                            name="request"
+                            style={{
+                                height: "36px",
+                                width: "120px",
+                                marginBottom: "20px",
+                            }}
+                        /> </div>
             <button
                 className="btn"
                 style={{ display: "inline-block" }}
