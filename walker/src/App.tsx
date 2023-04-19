@@ -4,6 +4,7 @@ import Login from "./pages/Login";
 import Create from "./pages/Create";
 import Accept from "./pages/Accept";
 import CoOpHome from "./pages/CoOpHome";
+import WalkerCall from "./pages/WalkerCall";
 
 function App() {
     return (
@@ -14,6 +15,7 @@ function App() {
                 <Route path="/accept-invite" element={<Accept />} />
                 <Route path="/create-co-op" element={<Create />} />
                 <Route path="/co-op-home" element={<CoOpHome userName = "JohnD" petName="Buddy" groupName="Happy Paws Co-Op" />} />
+                <Route path="/create-walker-call" element={<WalkerCall />} />
             </Routes>
         </HashRouter>
     );
