@@ -23,10 +23,10 @@ const invitationSchema: Schema = new Schema({
     required: true,
     match: /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/, //email regex
   },
-  // inviter: {
-  //   type: User.schema,
-  //   required: true
-  // }
+  inviter: {
+    type: User.schema,
+    required: true
+  }
 });
 
 const Invitation = model<IInvitation>('Invitation', invitationSchema)

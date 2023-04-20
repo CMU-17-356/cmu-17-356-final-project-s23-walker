@@ -9,7 +9,7 @@ const app: express.Application = express();
 
 const port = 8000;
 
-const dbUrl = '' //should be 'mongodb+srv://pkaufhol:<9oFW9kKmDwsz6Fff>@walker.63wphpg.mongodb.net/test'
+const dbUrl = 'mongodb+srv://pkaufhol:10002000@walker.63wphpg.mongodb.net/test' //should be 'mongodb+srv://pkaufhol:<9oFW9kKmDwsz6Fff>@walker.63wphpg.mongodb.net/test'
 
 mongoose
   .connect(dbUrl)

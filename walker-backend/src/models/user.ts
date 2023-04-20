@@ -27,9 +27,9 @@ const userSchema: Schema = new Schema({
     required: true,
     match: /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/, //email regex
   },
-  // coop: {
-  //   type: CoOp.schema,
-  // },
+  coop: {
+    type: CoOp.schema,
+  },
 });
 
 const User = model<IUser>('User', userSchema)

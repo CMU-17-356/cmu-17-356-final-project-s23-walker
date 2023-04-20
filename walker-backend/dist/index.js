@@ -6,7 +6,7 @@ import { router } from './routes/routes.js';
 // Initialize the express engine
 var app = express();
 var port = 8000;
-var dbUrl = ''; //should be 'mongodb+srv://pkaufhol:<9oFW9kKmDwsz6Fff>@walker.63wphpg.mongodb.net/test'
+var dbUrl = 'mongodb+srv://pkaufhol:10002000@walker.63wphpg.mongodb.net/test'; //should be 'mongodb+srv://pkaufhol:<9oFW9kKmDwsz6Fff>@walker.63wphpg.mongodb.net/test'
 mongoose
     .connect(dbUrl)
     .catch(function (e) {

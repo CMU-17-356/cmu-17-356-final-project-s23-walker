@@ -1,4 +1,5 @@
 import { Schema, model } from 'mongoose';
+import { CoOp } from './coop.js';
 var userSchema = new Schema({
     person_name: {
         type: String,
@@ -17,9 +18,9 @@ var userSchema = new Schema({
         required: true,
         match: /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/, //email regex
     },
-    // coop: {
-    //   type: CoOp.schema,
-    // },
+    coop: {
+        type: CoOp.schema,
+    },
 });
 var User = model('User', userSchema);
 export { User };

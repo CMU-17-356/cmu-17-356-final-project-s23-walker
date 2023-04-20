@@ -1,4 +1,6 @@
 import { Schema, model } from 'mongoose';
+import { User } from './user.js';
+import { CoOp } from './coop.js';
 var MAX_MONTH = 3; //number of months in advance users can set a walker call
 var today = new Date();
 var todayYear = today.getFullYear();
@@ -23,13 +25,13 @@ var schema = new Schema({
         default: function () { return new Date(Date.now()); },
         min: ["".concat(todayYear, "-").concat(todayMonth, "-").concat(todayDay), 'Date is in the past'],
         max: ["".concat(maxYear, "-").concat(maxMonth, "-").concat(maxDay), "Date is more than ".concat(MAX_MONTH, " months in the future")]
+    },
+    requester: {
+        type: User.schema
+    },
+    coop: {
+        type: CoOp.schema
     }
-    // requester: {
-    //   type: User.schema
-    // },
-    // coop: {
-    //   type: CoOp.schema
-    // }
 });
 var Call = model('Call', schema);
 export { Call };

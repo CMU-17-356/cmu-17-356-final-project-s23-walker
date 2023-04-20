@@ -40,13 +40,13 @@ const schema = new Schema({
     default: () => new Date(Date.now()),
     min: [`${todayYear}-${todayMonth}-${todayDay}`, 'Date is in the past'],
     max: [`${maxYear}-${maxMonth}-${maxDay}`, `Date is more than ${MAX_MONTH} months in the future`]
+  },
+  requester: {
+    type: User.schema
+  },
+  coop: {
+    type: CoOp.schema
   }
-  // requester: {
-  //   type: User.schema
-  // },
-  // coop: {
-  //   type: CoOp.schema
-  // }
 });
 
 const Call = model<ICall>('Call', schema)
