@@ -68,6 +68,8 @@ jobs:
               run: |
                   timeout 2m npm install
                   timeout 2m npx tsc
+              env:
+                  CI: false
 
             - uses: superfly/flyctl-actions/setup-flyctl@master
 
