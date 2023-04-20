@@ -6,10 +6,10 @@ import { NotUser } from '../models/user.js';
 class InvitationController {
   public getInvitations = async (req: Request, res: Response) => {
     Invitation.find({})
-      .then(invitations => {
+      .then((invitations: any) => {
         return res.status(200).json(invitations)
       })
-      .catch(err => {
+      .catch((err: any) => {
         return res.status(500).json(err)
       });
   }
@@ -20,10 +20,10 @@ class InvitationController {
     body.inviter = inviterUser
     const invitation = new Invitation(body)
     invitation.save()
-    .then(invitation => {
+    .then((invitation: any) => {
       return res.status(200).json(invitation)
     })
-    .catch(err => {
+    .catch((err: any) => {
       return res.status(500).json(err)
     });
   };

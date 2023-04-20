@@ -12,7 +12,7 @@ class CallController {
       .then(() => {
         res.status(200).json(`Call with requester ${requester?.person_name} and pet ${requester?.pet_name} created successfully.`);
       })
-      .catch(err => {
+      .catch((err: any) => {
         return res.status(500).json(err)
       });
   };
@@ -23,17 +23,17 @@ class CallController {
     const currCall = await Call.findById(body.call)
     const update = {accepter: currAccepter}
     currCall?.updateOne(update)
-    .then(currCall => {
+    .then((currCall: any) => {
       return res.status(200).json(currCall)
     })
   }
 
   public getAllCalls = async (req: Request, res: Response) => {
     Call.find({})
-      .then(calls => {
+      .then((calls: any) => {
         return res.status(200).json(calls)
       })
-      .catch(err => {
+      .catch((err: any) => {
         return res.status(500).json(err)
       });
   };

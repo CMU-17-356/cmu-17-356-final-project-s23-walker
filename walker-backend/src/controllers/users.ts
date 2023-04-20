@@ -12,14 +12,14 @@ class UserController {
     const user = new NotUser(body)
     const newCoop = new CoOp({users: [user]})
     newCoop.save()
-    .catch(err => {
+    .catch((err: any) => {
       return res.status(500).json(err)
     });
     user.save()
       .then(() => {
         res.status(200).json(`User with email ${body.email} created successfully.`);
       })
-      .catch(err => {
+      .catch((err: any) => {
         return res.status(500).json(err)
       });
   };
@@ -35,7 +35,7 @@ class UserController {
       .then(() => {
         res.status(200).json(`User with email ${body.email} joined co-op successfully.`);
       })
-      .catch(err => {
+      .catch((err: any) => {
         return res.status(500).json(err)
       });
   };
@@ -43,23 +43,23 @@ class UserController {
   public getUserByEmail = async (req: Request, res: Response) => {
     const email = req.params.email
     NotUser.findOne({email: email})
-      .then(user => {
+      .then((user: any) => {
         if (user) {
           return res.status(200).json(user)
         }
         return res.status(404).json(`User with email ${email} not found`)
       })
-      .catch(err => {
+      .catch((err: any) => {
         return res.status(500).json(err)
       });
   };
 
   public getAllUsers = async (req: Request, res: Response) => {
     NotUser.find({})
-      .then(users => {
+      .then((users: any) => {
         return res.status(200).json(users)
       })
-      .catch(err => {
+      .catch((err: any) => {
         return res.status(500).json(err)
       });
   };
