@@ -1,20 +1,19 @@
 import styles from "./Login.module.css";
 import logo from "../assets/logo.png";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import { React, useState } from "react";
 import 'react-calendar/dist/Calendar.css';
-import FullCalendar from "@fullcalendar/react";
-import dayGridPlugin from "@fullcalendar/daygrid";
+// import FullCalendar from "@fullcalendar/react";
+// import dayGridPlugin from "@fullcalendar/daygrid";
 
 
 function WalkerCall(): JSX.Element {
-    const [date, setDate] = useState(new Date());
+    // const [date, setDate] = useState(new Date());
     
     return (
         <div className={styles.container}>
             <img className={styles.logo} src={logo} alt="Walker logo" />
             <h1 className="subheading" style={{fontSize:"48px"}}>Create a new walker call request for pet care</h1>
-            
             <div >
             <h1 className="subheading" style={{fontSize:"36px", display: "inline-block", marginRight:"12px"}}>Type of Pet Care</h1>
                 <input type="checkbox" id="op1" name="walk" value="walk" />

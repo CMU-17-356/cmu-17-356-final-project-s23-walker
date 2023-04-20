@@ -5,7 +5,7 @@ import { User } from '../models/user.js';
 class InvitationController {
   public getInvitations = async (req: Request, res: Response) => {
     Invitation.find({})
-      .then((invitations: IInvitation) => {
+      .then((invitations: IInvitation[]) => {
         return res.status(200).json(invitations)
       })
       .catch((err: Error) => {
