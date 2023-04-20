@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { CoOp, ICoOp } from '../models/coop.js';
-import { User, IUser } from '../models/user.js';
+import { User} from '../models/user.js';
 
 class CoOpController {
     // public createCoOp = async (req: Request, res: Response) => {
@@ -40,13 +40,13 @@ class CoOpController {
     public getCoopById = async (req: Request, res: Response) => {
         const coopId = req.params.id;
         CoOp.findById(coopId)
-          .then((coop: any) => {
+          .then((coop: ICoOp |null) => {
             if (coop) {
               return res.status(200).json(coop);
             }
             return res.status(404).json(`Co-op with ID ${coopId} not found.`);
           })
-          .catch((err: any) => {
+          .catch((err: Error) => {
             return res.status(500).json(err);
           });
       };

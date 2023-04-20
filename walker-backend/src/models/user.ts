@@ -7,9 +7,9 @@ interface IUser {
   email: string
 }
 
-type UserModel = Model<IUser, {}, {}>
+type UserModel = Model<IUser, Record<string, never>, Record<string, never>>
 
-const userSchema: Schema = new Schema<IUser, UserModel, {}>({
+const userSchema: Schema = new Schema<IUser, UserModel,  Record<string, never>>({
   person_name: {
     type: String,
     required: true,

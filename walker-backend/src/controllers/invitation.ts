@@ -1,15 +1,14 @@
-import { CoOp } from '../models/coop.js';
 import { Request, Response } from 'express'
-import { Invitation } from '../models/invitation.js';
+import { Invitation, IInvitation } from '../models/invitation.js';
 import { User } from '../models/user.js';
 
 class InvitationController {
   public getInvitations = async (req: Request, res: Response) => {
     Invitation.find({})
-      .then((invitations: any) => {
+      .then((invitations: IInvitation) => {
         return res.status(200).json(invitations)
       })
-      .catch((err: any) => {
+      .catch((err: Error) => {
         return res.status(500).json(err)
       });
   }
@@ -20,11 +19,11 @@ class InvitationController {
     body.inviter = inviterUser
     const invitation = new Invitation(body)
     invitation.save()
-    .then((invitation: any) => {
+    .then((invitation: IInvitation) => {
       // to-do: send email to invitee
       return res.status(200).json(invitation)
     })
-    .catch((err: any) => {
+    .catch((err: Error) => {
       return res.status(500).json(err)
     });
   };

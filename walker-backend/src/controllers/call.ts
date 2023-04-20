@@ -1,4 +1,4 @@
-import { Call } from '../models/call.js';
+import { Call, ICall} from '../models/call.js';
 import { User } from '../models/user.js'
 import { Request, Response } from 'express'
 
@@ -12,7 +12,7 @@ class CallController {
       .then(() => {
         res.status(200).json(`Call with requester ${requester?.person_name} and pet ${requester?.pet_name} created successfully.`);
       })
-      .catch((err: any) => {
+      .catch((err: Error) => {
         return res.status(500).json(err)
       });
   };
@@ -24,7 +24,7 @@ class CallController {
     const update = {accepter: currAccepter}
     if (currCall) {
       currCall.updateOne(update)
-      .then((currCall: any) => {
+      .then((currCall: ICall | null) => {
         return res.status(200).json(currCall)
       })
     }
@@ -36,10 +36,10 @@ class CallController {
 
   public getAllCalls = async (req: Request, res: Response) => {
     Call.find({})
-      .then((calls: any) => {
+      .then((calls: ICall[]) => {
         return res.status(200).json(calls)
       })
-      .catch((err: any) => {
+      .catch((err: Error) => {
         return res.status(500).json(err)
       });
   };
