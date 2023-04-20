@@ -1,4 +1,4 @@
-var assert = require("assert");
+import assert from 'assert';
 
 // Sample test; needs to be replaced with actual tests
 describe("Array", function () {
