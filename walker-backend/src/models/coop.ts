@@ -1,13 +1,13 @@
 import { Schema, model } from 'mongoose';
-import { NotUser } from './user.js';
+import { User, IUser } from './user.js';
 
 interface ICoOp {
-  users: string[]
+  users: IUser[]
 }
 
 const coopSchema = new Schema({
   users: {
-    type: [NotUser.schema] //array of user IDs to avoid circular dependency
+    type: [User.schema]
   },
 
 });

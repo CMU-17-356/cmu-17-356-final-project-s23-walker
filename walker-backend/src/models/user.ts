@@ -29,7 +29,7 @@ const userSchema: Schema = new Schema<IUser, UserModel, {}>({
   },
 });
 
-const NotUser = model<IUser>('User', userSchema)
+const User = model<IUser>('User', userSchema)
 
-export { NotUser }
+export { User }
 export type { IUser }

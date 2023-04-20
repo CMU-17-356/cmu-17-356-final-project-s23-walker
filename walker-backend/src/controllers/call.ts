@@ -1,11 +1,11 @@
 import { Call } from '../models/call.js';
-import { NotUser } from '../models/user.js'
+import { User } from '../models/user.js'
 import { Request, Response } from 'express'
 
 class CallController {
   public createCall = async (req: Request, res: Response) => {
     const body = req.body
-    const requester = await NotUser.findById(body.requester) //check uniqueness
+    const requester = await User.findById(body.requester) //check uniqueness
     body.requester = requester
     const call = new Call(body)
     call.save()
@@ -19,13 +19,19 @@ class CallController {
   
   public acceptCall = async (req: Request, res: Response) => {
     const body = req.body    
-    const currAccepter = await NotUser.findById(body.accepter)
+    const currAccepter = await User.findById(body.accepter)
     const currCall = await Call.findById(body.call)
     const update = {accepter: currAccepter}
-    currCall?.updateOne(update)
-    .then((currCall: any) => {
-      return res.status(200).json(currCall)
-    })
+    if (currCall) {
+      currCall.updateOne(update)
+      .then((currCall: any) => {
+        return res.status(200).json(currCall)
+      })
+    }
+    else {
+      return res.status(500).json(`Cannot find call with ID ${body.call}`)
+    }
+
   }
 
   public getAllCalls = async (req: Request, res: Response) => {

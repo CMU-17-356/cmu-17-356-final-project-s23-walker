@@ -1,15 +1,15 @@
 import { CoOp } from '../models/coop.js';
-import { NotUser } from '../models/user.js'
+import { User } from '../models/user.js'
 import { Request, Response } from 'express'
 
 class UserController {
   public createUserAndCoop = async (req: Request, res: Response) => {
     const body = req.body
-    const unique = await NotUser.findOne({email: body.email}) //check uniqueness
+    const unique = await User.findOne({email: body.email}) //check uniqueness
     if (unique) {
       return res.status(400).json(`Account with email ${body.email} already exists.`)
     }
-    const user = new NotUser(body)
+    const user = new User(body)
     const newCoop = new CoOp({users: [user]})
     newCoop.save()
     .catch((err: any) => {
@@ -27,22 +27,24 @@ class UserController {
   public createUserJoinCoOp = async (req: Request, res: Response) => {
     const body = req.body
     const coop = await CoOp.findById(req.body.coop)
-    const coopArray = coop?.users
-    coopArray?.push(req.body.coop)
-    coop?.updateOne({users: coopArray})
-    const user = new NotUser(body)
-    user.save()
-      .then(() => {
-        res.status(200).json(`User with email ${body.email} joined co-op successfully.`);
-      })
-      .catch((err: any) => {
-        return res.status(500).json(err)
-      });
+    if (coop) {
+      const user = new User(body)
+      coop.users.push(user)
+      await coop.save()
+      user.save()
+        .then(() => {
+          res.status(200).json(`User with email ${body.email} joined co-op successfully.`);
+        })
+        .catch((err: any) => {
+          return res.status(500).json(err)
+        });
+    }
+
   };
   
   public getUserByEmail = async (req: Request, res: Response) => {
     const email = req.params.email
-    NotUser.findOne({email: email})
+    User.findOne({email: email})
       .then((user: any) => {
         if (user) {
           return res.status(200).json(user)
@@ -55,7 +57,7 @@ class UserController {
   };
 
   public getAllUsers = async (req: Request, res: Response) => {
-    NotUser.find({})
+    User.find({})
       .then((users: any) => {
         return res.status(200).json(users)
       })

@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose'
 import { CoOp, ICoOp } from './coop.js';
-import { IUser, NotUser } from './user.js';
+import { IUser, User } from './user.js';
 
 interface IInvitation {
   link: string,
@@ -20,7 +20,7 @@ const invitationSchema: Schema = new Schema({
     match: /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/, //email regex
   },
   inviter: {
-    type: NotUser.schema,
+    type: User.schema,
     required: true
   }
 });
