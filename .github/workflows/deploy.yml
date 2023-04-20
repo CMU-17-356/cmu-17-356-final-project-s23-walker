@@ -73,6 +73,6 @@ jobs:
 
             - name: Deploy Fly
               working-directory: ./walker-backend
-              run: flyctl deploy --remote-only
+              run: flyctl deploy --local-only
               env:
                   FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
