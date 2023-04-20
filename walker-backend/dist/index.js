@@ -1,20 +1,34 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
 // Import the express in typescript file
-const express_1 = __importDefault(require("express"));
+import express from 'express';
+import mongoose from 'mongoose';
+import cors from 'cors';
+import { router } from './routes/routes.js';
 // Initialize the express engine
-const app = (0, express_1.default)();
-// Take a port 8080 for running server.
-const port = 8080;
-// Handling '/' Request
-app.get('/', (_req, _res) => {
-    _res.send("Hello World");
+var app = express();
+var port = 8000;
+var dbUrl = ''; //should be 'mongodb+srv://pkaufhol:<9oFW9kKmDwsz6Fff>@walker.63wphpg.mongodb.net/test'
+mongoose
+    .connect(dbUrl)
+    .catch(function (e) {
+    console.error('Connection error', e.message);
 });
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+// Handling '/' Request
+app.get('/', function (_req, _res) {
+    _res.send("TypeScript with Express");
+});
+// Add a list of allowed origins.
+// If you have more origins you would like to add, you can add them to the array below.
+var allowedOrigins = ['http://localhost:8000', 'https://cmu-17-356.github.io/cmu-17-356-final-project-s23-walker/'];
+var options = {
+    origin: allowedOrigins
+};
+// Then pass these options to cors:
+app.use(cors(options));
+app.use(express.json());
+app.use('/api', router);
 // Server setup
-app.listen(port, () => {
-    console.log(`TypeScript with Express
-         http://localhost:${port}/`);
+app.listen(port, function () {
+    console.log("TypeScript with Express\n         http://localhost:".concat(port, "/"));
 });
