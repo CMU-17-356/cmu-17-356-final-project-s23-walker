@@ -1,19 +1,18 @@
-import { Schema, model } from 'mongoose'
-import { User, IUser } from './user.js'
+import { Schema, model } from 'mongoose';
+import { NotUser } from './user.js';
 
 interface ICoOp {
-  users: IUser[]
+  users: string[]
 }
 
-const schema = new Schema({
+const coopSchema = new Schema({
   users: {
-    type: [String], //should be [User.schema],
-    default: []
+    type: [NotUser.schema] //array of user IDs to avoid circular dependency
   },
 
 });
 
-const CoOp = model<ICoOp>('CoOp', schema)
+const CoOp = model<ICoOp>('CoOp', coopSchema)
 
 export { CoOp }
 export type { ICoOp }

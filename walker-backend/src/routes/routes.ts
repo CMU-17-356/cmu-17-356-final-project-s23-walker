@@ -1,12 +1,12 @@
 import { Router } from 'express';
-import { UsersController } from '../controllers/users.js'
+import { UserController } from '../controllers/users.js'
 
 const router = Router()
 
-const Users = new UsersController()
+const Users = new UserController()
 
-router.get('/users', Users.getUsers)
-router.post('/users', Users.createUser)
+router.get('/users', Users.getAllUsers)
+router.post('/users', Users.createUserAndCoop)
 router.get('/users/:email', Users.getUserByEmail)
 
 

@@ -1,15 +1,15 @@
-import { Schema, model } from 'mongoose'
-import { CoOp, ICoOp } from './coop.js';
+import { Model, Schema, model } from 'mongoose'
 
 interface IUser {
   person_name: string,
   password: string,
   pet_name: string,
-  email: string,
-  coop: ICoOp
+  email: string
 }
 
-const userSchema: Schema = new Schema({
+type UserModel = Model<IUser, {}, {}>
+
+const userSchema: Schema = new Schema<IUser, UserModel, {}>({
   person_name: {
     type: String,
     required: true,
@@ -27,12 +27,9 @@ const userSchema: Schema = new Schema({
     required: true,
     match: /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/, //email regex
   },
-  coop: {
-    type: CoOp.schema,
-  },
 });
 
-const User = model<IUser>('User', userSchema)
+const NotUser = model<IUser>('User', userSchema)
 
-export { User }
+export { NotUser }
 export type { IUser }

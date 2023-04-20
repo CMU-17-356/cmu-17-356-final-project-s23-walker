@@ -1,6 +1,6 @@
-import { Schema, model } from 'mongoose'
-import { User, IUser } from './user.js'
-import { CoOp, ICoOp } from './coop.js'
+import { Schema, model } from 'mongoose';
+import { NotUser, IUser } from './user.js';
+import { CoOp, ICoOp } from './coop.js';
 
 const MAX_MONTH = 3 //number of months in advance users can set a walker call
 
@@ -26,7 +26,7 @@ const maxYear = today.getFullYear()
 const maxMonth = today.getMonth() + 1
 const maxDay = today.getDate()
 
-const schema = new Schema({
+const callSchema = new Schema({
   activity: {
     type: String,
     required: true,
@@ -42,14 +42,14 @@ const schema = new Schema({
     max: [`${maxYear}-${maxMonth}-${maxDay}`, `Date is more than ${MAX_MONTH} months in the future`]
   },
   requester: {
-    type: User.schema
+    type: NotUser.schema
   },
   coop: {
     type: CoOp.schema
   }
 });
 
-const Call = model<ICall>('Call', schema)
+const Call = model<ICall>('Call', callSchema)
 
 export { Call }
 export type {ICall}
