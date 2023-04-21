@@ -5,9 +5,9 @@ FROM node:alpine
 WORKDIR /usr/app
 
 # Download and install a dependency
-# COPY ./package.json .
+COPY ./package.json .
 
-# RUN npm install
+RUN npm install
 
 COPY . .
 
