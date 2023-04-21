@@ -9,8 +9,11 @@ class UserController {
     if (unique) {
       return res.status(400).json(`Account with email ${body.email} already exists.`)
     }
-    const user = new User(body)
-    const newCoop = new CoOp({ users: [user] })
+    const userObj = { ...body };
+    delete userObj.group;
+
+    const user = new User(userObj)
+    const newCoop = new CoOp({ users: [user], name: body.group })
     newCoop.save()
       .catch((err: Error) => {
         return res.status(500).json(err)
