@@ -9,7 +9,7 @@ interface IUser {
 
 type UserModel = Model<IUser, Record<string, never>, Record<string, never>>
 
-const userSchema: Schema = new Schema<IUser, UserModel,  Record<string, never>>({
+const userSchema: Schema = new Schema<IUser, UserModel, Record<string, never>>({
   person_name: {
     type: String,
     required: true,
@@ -25,7 +25,8 @@ const userSchema: Schema = new Schema<IUser, UserModel,  Record<string, never>>(
   email: {
     type: String,
     required: true,
-    match: /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/, //email regex
+    match: /^[\w-.]+@([\w-]+\.)+[\w-]{2,}$/, //email regex
+    unique: true
   },
 });
 
