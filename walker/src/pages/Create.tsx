@@ -1,10 +1,15 @@
-import React from "react";
+import { useNavigate } from "react-router-dom";
 
 import styles from "./Login.module.css";
 import logo from "../assets/logo.png";
 import { Link } from "react-router-dom";
 
-function Accept(): JSX.Element {
+function Create({
+    handleLogin,
+}: {
+    handleLogin: (email?: string) => void;
+}): JSX.Element {
+    const navigate = useNavigate();
     const handleSubmit = async (event: any) => {
         console.log(event.target);
         event.preventDefault();
@@ -34,6 +39,8 @@ function Accept(): JSX.Element {
         });
         const data = await response.json();
         console.log(data);
+        handleLogin(data.email);
+        navigate("/co-op-home");
     };
 
     return (
@@ -105,4 +112,4 @@ function Accept(): JSX.Element {
         </div>
     );
 }
-export default Accept;
+export default Create;

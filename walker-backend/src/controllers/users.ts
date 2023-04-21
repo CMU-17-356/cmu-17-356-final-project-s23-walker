@@ -18,8 +18,8 @@ class UserController {
         return res.status(500).json(err)
       });
     user.save()
-      .then(() => {
-        res.status(200).json(`User with email ${body.user.email} created successfully.`);
+      .then((resp) => {
+        res.status(200).json(resp);
       })
       .catch((err: Error) => {
         return res.status(500).json(err)

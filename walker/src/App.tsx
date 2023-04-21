@@ -18,10 +18,8 @@ function App() {
     };
 
     // TODO: replace this once the actual login is implemented
-    // Temporarily, hardcode the user to be logged in
-    const handleLogin = () => {
-        // Temp user ID
-        const email = "john.doe@example.com";
+    // Temporarily, hardcode the default user to be logged in
+    const handleLogin = (email = "abcd@gmail.com") => {
         sessionStorage.setItem("user", email);
         getUser(email);
     };
@@ -45,7 +43,10 @@ function App() {
                 <Route path="/" element={<Landing />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/accept-invite" element={<Accept />} />
-                <Route path="/create-co-op" element={<Create />} />
+                <Route
+                    path="/create-co-op"
+                    element={<Create handleLogin={handleLogin} />}
+                />
                 <Route
                     path="/co-op-home"
                     element={
