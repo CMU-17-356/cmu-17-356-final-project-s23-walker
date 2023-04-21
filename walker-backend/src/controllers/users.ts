@@ -5,19 +5,21 @@ import { Request, Response } from 'express'
 class UserController {
   public createUserAndCoop = async (req: Request, res: Response) => {
     const body = req.body
-    const unique = await User.findOne({email: body.email}) //check uniqueness
+    const unique = await User.findOne({ email: body.email }) //check uniqueness
     if (unique) {
       return res.status(400).json(`Account with email ${body.email} already exists.`)
     }
-    const user = new User(body)
-    const newCoop = new CoOp({users: [user]})
+    const userObj = body.user;
+
+    const user = new User(userObj)
+    const newCoop = new CoOp({ users: [user], name: body.group })
     newCoop.save()
-    .catch((err: Error) => {
-      return res.status(500).json(err)
-    });
+      .catch((err: Error) => {
+        return res.status(500).json(err)
+      });
     user.save()
-      .then(() => {
-        res.status(200).json(`User with email ${body.email} created successfully.`);
+      .then((resp) => {
+        res.status(200).json(resp);
       })
       .catch((err: Error) => {
         return res.status(500).json(err)
@@ -41,10 +43,10 @@ class UserController {
     }
 
   };
-  
+
   public getUserByEmail = async (req: Request, res: Response) => {
     const email = req.params.email
-    User.findOne({email: email})
+    User.findOne({ email: email })
       .then((user: IUser | null) => {
         if (user) {
           return res.status(200).json(user)

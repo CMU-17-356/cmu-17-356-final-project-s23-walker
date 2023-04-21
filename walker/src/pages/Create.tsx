@@ -1,15 +1,55 @@
+import { useNavigate } from "react-router-dom";
+
 import styles from "./Login.module.css";
 import logo from "../assets/logo.png";
 import { Link } from "react-router-dom";
 
-function Accept(): JSX.Element {
+function Create({
+    handleLogin,
+}: {
+    handleLogin: (email?: string) => void;
+}): JSX.Element {
+    const navigate = useNavigate();
+    const handleSubmit = async (event: any) => {
+        console.log(event.target);
+        event.preventDefault();
+        const formData = new FormData(event.target);
+
+        // access the form values using the "get" method of the FormData object
+        const email = formData.get("email");
+        const password = formData.get("password");
+        const person_name = formData.get("name");
+        const pet_name = formData.get("pet_name");
+        const group = formData.get("group");
+
+        const response = await fetch("/api/users/createandjoin", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                user: {
+                    email,
+                    password,
+                    person_name,
+                    pet_name,
+                },
+                group,
+            }),
+        });
+        const data = await response.json();
+        console.log(data);
+        handleLogin(data.email);
+        navigate("/co-op-home");
+    };
+
     return (
         <div className={styles.container}>
             <img className={styles.logo} src={logo} alt="Walker logo" />
             <h1 className="subheading">
                 Create a New Walker Pet Care Co-Op Here!
             </h1>
-            <form className={styles.form}>
+            <form onSubmit={handleSubmit} className={styles.form}>
                 <div>
                     <label className="form-field" htmlFor="email">
                         Email
@@ -44,14 +84,14 @@ function Accept(): JSX.Element {
                     />
                 </div>
                 <div>
-                    <label className="form-field" htmlFor="petName">
+                    <label className="form-field" htmlFor="pet_name">
                         Your Pet's Name
                     </label>
                     <input
                         placeholder="Add text"
                         type="text"
-                        id="petName"
-                        name="petName"
+                        id="pet_name"
+                        name="pet_name"
                     />
                 </div>
                 <div>
@@ -65,11 +105,11 @@ function Accept(): JSX.Element {
                         name="group"
                     />
                 </div>
+                <button type="submit" className="btn">
+                    Create New Co-Op
+                </button>
             </form>
-            <Link to="/co-op-home" className="btn">
-                Create New Co-Op
-            </Link>
         </div>
     );
 }
-export default Accept;
+export default Create;
