@@ -7,6 +7,9 @@ on:
     push:
         branches:
             - master
+    pull_request:
+        branches:
+            - master
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -36,6 +39,8 @@ jobs:
               run: |
                   timeout 2m npm install
                   timeout 2m npm run build
+              env:
+                  CI: false
 
             - uses: peaceiris/actions-gh-pages@v3
               with:
@@ -63,6 +68,8 @@ jobs:
               run: |
                   timeout 2m npm install
                   timeout 2m npx tsc
+              env:
+                  CI: false
 
             - uses: superfly/flyctl-actions/setup-flyctl@master
 
@@ -71,3 +78,4 @@ jobs:
               run: flyctl deploy --remote-only
               env:
                   FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+                  CI: false
