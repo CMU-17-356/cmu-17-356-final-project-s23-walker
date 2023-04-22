@@ -9,11 +9,11 @@ class UserController {
     if (unique) {
       return res.status(400).json(`Account with email ${body.email} already exists.`)
     }
-    const userObj = body.user;
-    const user = new User({person_name: userObj.person_name,
-      pet_name: userObj.pet_name,
-      email: userObj.email})
-    user.schema.methods.setPassword(userObj.password)
+    const user = new User({person_name: body.person_name,
+      pet_name: body.pet_name,
+      email: body.email})
+
+    user.schema.methods.setPassword(body.password)
     const newCoop = new CoOp({ users: [user], name: body.group })
     newCoop.save()
       .catch((err: Error) => {
@@ -31,12 +31,11 @@ class UserController {
   public createUserJoinCoOp = async (req: Request, res: Response) => {
     const body = req.body
     const coop = await CoOp.findById(req.body.coop)
-    const userObj = body.user;
     if (coop) {
-      const user = new User({person_name: userObj.person_name,
-        pet_name: userObj.pet_name,
-        email: userObj.email})
-      user.schema.methods.setPassword(userObj.password)
+      const user = new User({person_name: body.person_name,
+        pet_name: body.pet_name,
+        email: body.email})
+      user.schema.methods.setPassword(body.password)
       coop.users.push(user)
       await coop.save()
       user.save()

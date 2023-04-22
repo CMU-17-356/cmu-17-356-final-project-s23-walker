@@ -1,6 +1,6 @@
 import { User } from '../models/user.js'
 import { Request, Response } from 'express'
-import { sign, verify, VerifyErrors } from 'jsonwebtoken'
+import jwt from 'jsonwebtoken'
 
 const EXPIRATION_IN_SECONDS = 60 * 60 //set time user can be logged in until expiration
 
@@ -12,7 +12,7 @@ class AuthController {
           if (user.schema.methods.validPassword(req.body.password)) { 
               const secret_key = process.env.JWT_SECRET_KEY
               if (secret_key !== undefined) {
-                const newToken = sign({ public: 'pomeranian' }, secret_key, { expiresIn: EXPIRATION_IN_SECONDS });
+                const newToken = jwt.sign({ public: 'pomeranian' }, secret_key, { expiresIn: EXPIRATION_IN_SECONDS });
                 return res.status(200).send({ 
                     token : newToken, 
                 }) 
@@ -44,7 +44,7 @@ public validateToken = async (req: Request, res: Response) => {
   const token = req.body.token
   const secret_key = process.env.HASH_SECRET_KEY
   if (secret_key !== undefined) {
-    verify(token, secret_key, function(err : VerifyErrors | null) {
+    jwt.verify(token, secret_key, function(err : jwt.VerifyErrors | null) {
       if (err) {
         return res.status(400).send({ 
           message : err.message
