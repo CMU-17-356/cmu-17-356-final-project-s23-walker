@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { CoOp, ICoOp } from '../models/coop.js';
-import { User} from '../models/user.js';
+import { User } from '../models/user.js';
 
 class CoOpController {
     // public createCoOp = async (req: Request, res: Response) => {

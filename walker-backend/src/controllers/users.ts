@@ -1,7 +1,7 @@
 import { CoOp } from '../models/coop.js';
 import { User, IUser } from '../models/user.js'
 import { Request, Response } from 'express'
-import { sign } from 'jsonwebtoken'
+
 class UserController {
   public createUserAndCoop = async (req: Request, res: Response) => {
     const body = req.body

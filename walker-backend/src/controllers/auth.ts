@@ -1,6 +1,8 @@
 import { User } from '../models/user.js'
 import { Request, Response } from 'express'
-import { sign, verify, VerifyErrors, JwtPayload, Jwt } from 'jsonwebtoken'
+import { sign, verify, VerifyErrors } from 'jsonwebtoken'
+
+const EXPIRATION_IN_SECONDS = 60 * 60 //set time user can be logged in until expiration
 
 class AuthController {
   public login = async (req: Request, res: Response) => { 
@@ -10,7 +12,7 @@ class AuthController {
           if (user.schema.methods.validPassword(req.body.password)) { 
               const secret_key = process.env.HASH_SECRET_KEY
               if (secret_key !== undefined) {
-                const newToken = sign({ public: 'pomeranian' }, secret_key, { expiresIn: 60 * 60 });
+                const newToken = sign({ public: 'pomeranian' }, secret_key, { expiresIn: EXPIRATION_IN_SECONDS });
                 return res.status(200).send({ 
                     token : newToken, 
                 }) 

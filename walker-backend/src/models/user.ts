@@ -1,5 +1,5 @@
 import { pbkdf2Sync, randomBytes } from 'crypto';
-import { Model, Schema, model } from 'mongoose'
+import { Schema, model } from 'mongoose'
 
 //password hashing following this guide: https://www.loginradius.com/blog/engineering/password-hashing-with-nodejs/
 interface IUser {
