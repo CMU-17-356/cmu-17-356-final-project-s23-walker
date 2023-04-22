@@ -1,7 +1,7 @@
 import { CoOp } from '../models/coop.js';
 import { User, IUser } from '../models/user.js'
 import { Request, Response } from 'express'
-
+import { sign } from 'jsonwebtoken'
 class UserController {
   public createUserAndCoop = async (req: Request, res: Response) => {
     const body = req.body
@@ -79,34 +79,5 @@ class UserController {
         return res.status(500).json(err)
       });
   };
-
-  public login = async (req: Request, res: Response) => { 
-
-    // Find user with requested email 
-    User.findOne({ email : req.body.email })
-      .then((user) => { 
-        if (user) { 
-          if (user.schema.methods.validPassword(req.body.password)) { 
-              const newToken = "bleh" // TODO: implement JWTs
-              return res.status(200).send({ 
-                  token : newToken, 
-              }) 
-          } 
-          else { 
-              return res.status(400).send({ 
-                  message : "Incorrect password"
-              }); 
-          } 
-      }
-        else { 
-          return res.status(400).send({ 
-              message : "User not found"
-          }); 
-      }
-    })
-    .catch((err: Error) => {
-      return res.status(500).json(err)
-    });
-}
 }
 export { UserController }
