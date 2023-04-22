@@ -19,6 +19,7 @@ class UserController {
 
     newCoop.save().then(() => {
       user.save()
+      user.setPassword(userObj.password)
         .then((resp) => {
           res.status(200).json(resp);
         })
@@ -37,8 +38,12 @@ class UserController {
   public createUserJoinCoOp = async (req: Request, res: Response) => {
     const body = req.body
     const coop = await CoOp.findById(req.body.coop)
+    const userObj = body.user;
     if (coop) {
-      const user = new User(body)
+      const user = new User({person_name: userObj.person_name,
+        pet_name: userObj.pet_name,
+        email: userObj.email})
+      user.schema.methods.setPassword(userObj.password)
       coop.users.push(user)
       await coop.save()
       user.save()
@@ -49,7 +54,6 @@ class UserController {
           return res.status(500).json(err)
         });
     }
-
   };
 
   public getUserByEmail = async (req: Request, res: Response) => {
@@ -75,5 +79,34 @@ class UserController {
         return res.status(500).json(err)
       });
   };
+
+  public login = async (req: Request, res: Response) => { 
+
+    // Find user with requested email 
+    User.findOne({ email : req.body.email })
+      .then((user) => { 
+        if (user) { 
+          if (user.schema.methods.validPassword(req.body.password)) { 
+              const newToken = "bleh" // TODO: implement JWTs
+              return res.status(200).send({ 
+                  token : newToken, 
+              }) 
+          } 
+          else { 
+              return res.status(400).send({ 
+                  message : "Incorrect password"
+              }); 
+          } 
+      }
+        else { 
+          return res.status(400).send({ 
+              message : "User not found"
+          }); 
+      }
+    })
+    .catch((err: Error) => {
+      return res.status(500).json(err)
+    });
+}
 }
 export { UserController }
