@@ -27,13 +27,11 @@ function Create({
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                user: {
-                    email,
-                    password,
-                    person_name,
-                    pet_name,
-                },
-                group,
+                email : email,
+                password : password,
+                person_name : person_name,
+                pet_name : pet_name,
+                group : group,
             }),
         });
         const data = await response.json();
