@@ -59,7 +59,7 @@ class UserController {
       const user = new User({person_name: body.person_name,
         pet_name: body.pet_name,
         email: body.email})
-      user.schema.methods.setPassword(body.password)
+      user.setPassword(body.password)
       coop.users.push(user)
       await coop.save()
       user.save()

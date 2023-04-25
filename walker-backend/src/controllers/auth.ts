@@ -9,7 +9,7 @@ class AuthController {
     User.findOne({ email : req.body.email })
       .then((user) => { 
         if (user) { 
-          if (user.schema.methods.validPassword(req.body.password)) { 
+          if (user.validPassword(req.body.password)) { 
               const secret_key = process.env.JWT_SECRET_KEY
               if (secret_key !== undefined) {
                 const newToken = jwt.sign({ public: 'pomeranian' }, secret_key, { expiresIn: EXPIRATION_IN_SECONDS });
@@ -42,7 +42,7 @@ class AuthController {
 
 public validateToken = async (req: Request, res: Response) => {
   const token = req.body.token
-  const secret_key = process.env.HASH_SECRET_KEY
+  const secret_key = process.env.JWT_SECRET_KEY
   if (secret_key !== undefined) {
     jwt.verify(token, secret_key, function(err : jwt.VerifyErrors | null) {
       if (err) {

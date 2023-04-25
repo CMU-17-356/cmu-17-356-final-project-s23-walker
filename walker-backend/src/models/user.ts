@@ -1,5 +1,5 @@
 import { pbkdf2Sync, randomBytes } from 'crypto';
-import { Schema, model } from 'mongoose'
+import { Model, Schema, model } from 'mongoose'
 
 //password hashing following this guide: https://www.loginradius.com/blog/engineering/password-hashing-with-nodejs/
 interface IUser {
@@ -11,7 +11,14 @@ interface IUser {
   salt : string 
 }
 
-const userSchema = new Schema<IUser>({
+interface IUserMethods {
+  setPassword: (password : string) => void,
+  validPassword: (password : string) => boolean
+}
+
+type UserModel = Model<IUser, unknown, IUserMethods>;
+
+const userSchema = new Schema<IUser, UserModel, IUserMethods>({
   person_name: {
     type: String,
     required: true,
@@ -35,19 +42,20 @@ const userSchema = new Schema<IUser>({
 });
 
 // Method to set salt and hash the password for a user 
-userSchema.methods.setPassword = function(password : string) { 
+userSchema.method('setPassword', function setPasword(password : string) { 
      this.salt = randomBytes(16).toString('hex'); 
      this.hash = pbkdf2Sync(password, this.salt,  
      200, 64, `sha512`).toString(`hex`); 
- }; 
+ })
 
- userSchema.methods.validPassword = function(password : string) { 
-     const hash = pbkdf2Sync(password,  
-     this.salt, 1000, 64, `sha512`).toString(`hex`); 
+ userSchema.method('validPassword', function validPassword(password : string) { 
+     const hash : string = pbkdf2Sync(password,  
+     this.salt, 200, 64, `sha512`).toString(`hex`);
+
      return this.hash === hash; 
- }; 
+ })
 
-const User = model<IUser>('User', userSchema)
+const User = model<IUser, UserModel>('User', userSchema)
 
 export { User }
 export type { IUser }
