@@ -21,7 +21,6 @@ router.get('/calls', Calls.getAllCalls);
 // User routes
 router.post('/users/createandjoin', Users.createUserAndCoop);
 router.post('/users/joincoop', Users.createUserJoinCoOp);
-router.post('/auth/login', Auth.login);
 router.get('/users', Users.getAllUsers);
 router.get('/users/:email', Users.getUserByEmail);
 
