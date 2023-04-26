@@ -11,8 +11,12 @@ class UserController {
     }
     const userObj = body.user;
 
-    const user = new User(userObj)
-    const newCoop = new CoOp({ users: [user], name: body.group })
+    const newCoop = new CoOp({ name: body.group });
+
+    const user = new User({ ...userObj, coop_id: newCoop._id });
+
+    newCoop.users.push(user)
+
     newCoop.save()
       .catch((err: Error) => {
         return res.status(500).json(err)
