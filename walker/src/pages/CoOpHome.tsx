@@ -17,8 +17,8 @@ interface WalkerCall {
 }
 
 interface GroupMember {
-    dogOwnerName: string;
-    dogName: string;
+    person_name: string;
+    pet_name: string;
 }
 
 interface ExtendedProps {
@@ -67,16 +67,9 @@ const events = pendingWalkerCalls.map(
     }
 );
 
-const groupMembers: GroupMember[] = [
-    { dogOwnerName: "Rebecca", dogName: "Jeanie" },
-    { dogOwnerName: "Alex", dogName: "Bruce" },
-    { dogOwnerName: "Susanna", dogName: "Hubble" },
-];
-
 function CoOpHome({
     userName,
     petName,
-    groupName,
 }: {
     userName: string;
     petName: string;
@@ -102,7 +95,7 @@ function CoOpHome({
         <div className={styles.container}>
             <div className={styles.header}>
                 <h1 className="heading" style={{ fontSize: "60px" }}>
-                    {groupName}
+                    {coop?.name ?? "Co-Op"}
                 </h1>
                 <img
                     src={logo}
@@ -173,11 +166,16 @@ function CoOpHome({
                         Group Members
                     </p>
                     <ul style={{ listStyleType: "none" }}>
-                        {groupMembers.map((member, index) => (
-                            <li key={index} style={{ paddingRight: "20px" }}>
-                                {member.dogOwnerName} & {member.dogName}
-                            </li>
-                        ))}
+                        {(coop?.users ?? []).map(
+                            (user: GroupMember, index: number) => (
+                                <li
+                                    key={index}
+                                    style={{ paddingRight: "20px" }}
+                                >
+                                    {user?.person_name} & {user?.pet_name}
+                                </li>
+                            )
+                        )}
                     </ul>
 
                     <div>
