@@ -1,4 +1,5 @@
-import React from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 
@@ -81,6 +82,22 @@ function CoOpHome({
     petName: string;
     groupName: string;
 }): JSX.Element {
+    const [coop, setCoop] = useState();
+    const { id } = useParams();
+
+    useEffect(() => {
+        fetch(`/api/coops/${id}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                console.log(data);
+                setCoop(data);
+            });
+    }, []);
     return (
         <div className={styles.container}>
             <div className={styles.header}>

@@ -48,7 +48,7 @@ function App() {
                     element={<Create handleLogin={handleLogin} />}
                 />
                 <Route
-                    path="/co-op-home"
+                    path="/co-op-home/:id"
                     element={
                         <CoOpHome
                             userName="JohnD"

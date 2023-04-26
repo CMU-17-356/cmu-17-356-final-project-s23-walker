@@ -1,27 +1,11 @@
 import styles from "./Login.module.css";
 import logo from "../assets/logo.png";
 // import { Link } from "react-router-dom";
-import { React, useState } from "react";
+import { React } from "react";
 import "react-calendar/dist/Calendar.css";
-// import FullCalendar from "@fullcalendar/react";
-// import dayGridPlugin from "@fullcalendar/daygrid";
 
 function WalkerCall(): JSX.Element {
     // const [date, setDate] = useState(new Date());
-
-    /* 
-      TODO: 
-      - change div into a form   
-      - create a handleSubmit function that will send the data to the backend (like in Create.tsx)
-      - make a post request to /calls (make sure body mathces schema in walker-backend/src/models/call.ts)
-      {
-        activity: ...
-        details: ...,
-        date: ...,
-        requester: ..., // make sure that this is a user object
-        coop: ... // coop object
-      }
-    */
     return (
         <div className={styles.container}>
             <img className={styles.logo} src={logo} alt="Walker logo" />
