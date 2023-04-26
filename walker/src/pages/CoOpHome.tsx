@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
+import { Link } from "react-router-dom";
 
 import styles from "./CoOp.module.css";
 import logo from "../assets/logo.png";
-import { Link } from "react-router-dom";
+import type { IUser } from "../../../walker-backend/src/models/user";
 
 interface WalkerCall {
     id: number;
@@ -67,14 +68,7 @@ const events = pendingWalkerCalls.map(
     }
 );
 
-function CoOpHome({
-    userName,
-    petName,
-}: {
-    userName: string;
-    petName: string;
-    groupName: string;
-}): JSX.Element {
+function CoOpHome({ user }: { user: IUser }): JSX.Element {
     const [coop, setCoop] = useState();
     const { id } = useParams();
 
@@ -104,7 +98,7 @@ function CoOpHome({
                 />
                 <div className={styles.welcome}>
                     <p className={"subheading"} style={{ fontSize: "36px" }}>
-                        Welcome {userName} & {petName}!
+                        Welcome {user?.person_name} & {user?.pet_name}!
                     </p>
                     <Link
                         to="/create-walker-call"

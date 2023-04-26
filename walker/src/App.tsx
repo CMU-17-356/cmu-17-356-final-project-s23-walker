@@ -49,13 +49,7 @@ function App() {
                 />
                 <Route
                     path="/co-op-home/:id"
-                    element={
-                        <CoOpHome
-                            userName="JohnD"
-                            petName="Buddy"
-                            groupName="Happy Paws Co-Op"
-                        />
-                    }
+                    element={<CoOpHome user={user} />}
                 />
                 <Route path="/create-walker-call" element={<WalkerCall />} />
             </Routes>
