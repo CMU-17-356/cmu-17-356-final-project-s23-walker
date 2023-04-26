@@ -1,8 +1,10 @@
 import { Schema, model } from 'mongoose';
 import { User, IUser } from './user.js';
+import { Call, ICall } from './call.js';
 
 interface ICoOp {
   users: IUser[],
+  calls: ICall[],
   name: string,
 }
 
@@ -12,6 +14,9 @@ const coopSchema = new Schema({
   },
   name: {
     type: String
+  },
+  call: {
+    type: [Call.schema]
   }
 });
 
