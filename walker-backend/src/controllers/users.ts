@@ -9,7 +9,6 @@ class UserController {
     if (unique) {
       return res.status(400).json(`Account with email ${body.email} already exists.`)
     }
-<<<<<<< HEAD
     const userObj = body.user;
 
     const newCoop = new CoOp({ name: body.group });
@@ -17,10 +16,9 @@ class UserController {
     const user = new User({ ...userObj, coop_id: newCoop._id });
     console.log(user)
     newCoop.users.push(user)
-
+    user.setPassword(userObj.password)
     newCoop.save().then(() => {
       user.save()
-      user.setPassword(userObj.password)
         .then((resp) => {
           res.status(200).json(resp);
         })
@@ -29,22 +27,6 @@ class UserController {
           return res.status(500).json(err)
         });
     })
-=======
-    const user = new User({person_name: body.person_name,
-      pet_name: body.pet_name,
-      email: body.email})
-
-    user.schema.methods.setPassword(body.password)
-    const newCoop = new CoOp({ users: [user], name: body.group })
-    newCoop.save()
-      .catch((err: Error) => {
-        return res.status(500).json(err)
-      });
-    user.save()
-      .then((resp) => {
-        res.status(200).json(resp);
-      })
->>>>>>> cleanup
       .catch((err: Error) => {
         console.log('newcoop error', err)
         return res.status(500).json(err)
