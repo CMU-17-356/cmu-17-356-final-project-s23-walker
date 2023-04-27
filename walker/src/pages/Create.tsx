@@ -28,12 +28,12 @@ function Create({
             },
             body: JSON.stringify({
                 user: {
-                    email,
-                    password,
-                    person_name,
-                    pet_name,
+                    email : email,
+                    password : password,
+                    person_name : person_name,
+                    pet_name : pet_name,
                 },
-                group,
+                group : group,
             }),
         });
         const data = await response.json();

@@ -16,7 +16,7 @@ class UserController {
     const user = new User({ ...userObj, coop_id: newCoop._id });
     console.log(user)
     newCoop.users.push(user)
-
+    user.setPassword(userObj.password)
     newCoop.save().then(() => {
       user.save()
         .then((resp) => {
@@ -38,7 +38,10 @@ class UserController {
     const body = req.body
     const coop = await CoOp.findById(req.body.coop)
     if (coop) {
-      const user = new User(body)
+      const user = new User({person_name: body.person_name,
+        pet_name: body.pet_name,
+        email: body.email})
+      user.setPassword(body.password)
       coop.users.push(user)
       await coop.save()
       user.save()
@@ -49,7 +52,6 @@ class UserController {
           return res.status(500).json(err)
         });
     }
-
   };
 
   public getUserByEmail = async (req: Request, res: Response) => {
