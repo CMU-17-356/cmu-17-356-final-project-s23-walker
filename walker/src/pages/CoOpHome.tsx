@@ -1,10 +1,12 @@
-import React from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
+import { Link } from "react-router-dom";
 
 import styles from "./CoOp.module.css";
 import logo from "../assets/logo.png";
-import { Link } from "react-router-dom";
+import type { IUser } from "../../../walker-backend/src/models/user";
 
 interface WalkerCall {
     id: number;
@@ -16,8 +18,8 @@ interface WalkerCall {
 }
 
 interface GroupMember {
-    dogOwnerName: string;
-    dogName: string;
+    person_name: string;
+    pet_name: string;
 }
 
 interface ExtendedProps {
@@ -66,26 +68,28 @@ const events = pendingWalkerCalls.map(
     }
 );
 
-const groupMembers: GroupMember[] = [
-    { dogOwnerName: "Rebecca", dogName: "Jeanie" },
-    { dogOwnerName: "Alex", dogName: "Bruce" },
-    { dogOwnerName: "Susanna", dogName: "Hubble" },
-];
+function CoOpHome({ user }: { user: IUser }): JSX.Element {
+    const [coop, setCoop] = useState();
+    const { id } = useParams();
 
-function CoOpHome({
-    userName,
-    petName,
-    groupName,
-}: {
-    userName: string;
-    petName: string;
-    groupName: string;
-}): JSX.Element {
+    useEffect(() => {
+        fetch(`/api/coops/${id}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                console.log(data);
+                setCoop(data);
+            });
+    }, []);
     return (
         <div className={styles.container}>
             <div className={styles.header}>
                 <h1 className="heading" style={{ fontSize: "60px" }}>
-                    {groupName}
+                    {coop?.name ?? "Co-Op"}
                 </h1>
                 <img
                     src={logo}
@@ -94,7 +98,7 @@ function CoOpHome({
                 />
                 <div className={styles.welcome}>
                     <p className={"subheading"} style={{ fontSize: "36px" }}>
-                        Welcome {userName} & {petName}!
+                        Welcome {user?.person_name} & {user?.pet_name}!
                     </p>
                     <Link
                         to="/create-walker-call"
@@ -156,11 +160,16 @@ function CoOpHome({
                         Group Members
                     </p>
                     <ul style={{ listStyleType: "none" }}>
-                        {groupMembers.map((member, index) => (
-                            <li key={index} style={{ paddingRight: "20px" }}>
-                                {member.dogOwnerName} & {member.dogName}
-                            </li>
-                        ))}
+                        {(coop?.users ?? []).map(
+                            (user: GroupMember, index: number) => (
+                                <li
+                                    key={index}
+                                    style={{ paddingRight: "20px" }}
+                                >
+                                    {user?.person_name} & {user?.pet_name}
+                                </li>
+                            )
+                        )}
                     </ul>
 
                     <div>

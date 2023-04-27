@@ -2,7 +2,6 @@ import { useNavigate } from "react-router-dom";
 
 import styles from "./Login.module.css";
 import logo from "../assets/logo.png";
-import { Link } from "react-router-dom";
 
 function Create({
     handleLogin,
@@ -40,7 +39,7 @@ function Create({
         const data = await response.json();
         console.log(data);
         handleLogin(data.email);
-        navigate("/co-op-home");
+        navigate(`/co-op-home/${data.coop_id}`);
     };
 
     return (
