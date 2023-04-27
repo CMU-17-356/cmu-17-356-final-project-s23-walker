@@ -5,17 +5,21 @@ import { Request, Response } from 'express'
 
 class CallController {
   public createCall = async (req: Request, res: Response) => {
-    const body = req.body
+    const { body } = req
     const requester = await User.findById(body.requester) //check uniqueness
     body.requester = requester
+
+    // TODO: once changes to user schema are merged in, change body.coop to requester.coop_id
     const coop = await CoOp.findById(body.coop)
     const call = new Call(body)
+    console.log("coop", coop, "call", call)
     call.save()
       .then(() => {
-        coop?.calls.push(call)
-        coop?.save().then(() => {
+        coop?.updateOne({ calls: [...(coop?.calls ?? []), call] }).then(() => {
           return res.status(200).json(`Call with requester ${requester?.person_name} and pet ${requester?.pet_name} created successfully.`);
-        })
+        }).catch((err: Error) => {
+          return res.status(500).json(err)
+        });
       })
       .catch((err: Error) => {
         return res.status(500).json(err)

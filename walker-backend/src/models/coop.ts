@@ -15,7 +15,7 @@ const coopSchema = new Schema({
   name: {
     type: String
   },
-  call: {
+  calls: {
     type: [Call.schema]
   }
 });
