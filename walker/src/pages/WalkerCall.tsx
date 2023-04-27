@@ -3,10 +3,13 @@ import logo from "../assets/logo.png";
 // import { Link } from "react-router-dom";
 import { React } from "react";
 import "react-calendar/dist/Calendar.css";
+import { useNavigate } from "react-router-dom";
+
 
 
 
 function WalkerCall({ user }: { user: any }): JSX.Element {
+    const navigate = useNavigate();
 
     const handleSubmit = async (event: any) => {
         event.preventDefault();
@@ -31,8 +34,10 @@ function WalkerCall({ user }: { user: any }): JSX.Element {
                 }),
             });
 
+
             const data = await response.json();
             console.log(data);
+            navigate(`/co-op-home/${user.coop_id}`);
             // You may navigate to another page or show a success message here
         } catch (error) {
             console.error("Error creating walker call", error);
