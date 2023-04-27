@@ -9,10 +9,9 @@ class CallController {
     const requester = await User.findById(body.requester) //check uniqueness
     body.requester = requester
 
-    // TODO: once changes to user schema are merged in, change body.coop to requester.coop_id
-    const coop = await CoOp.findById(body.coop)
+    const coop = await CoOp.findById(requester?.coop_id)
     const call = new Call(body)
-    console.log("coop", coop, "call", call)
+
     call.save()
       .then(() => {
         coop?.updateOne({ calls: [...(coop?.calls ?? []), call] }).then(() => {

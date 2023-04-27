@@ -7,15 +7,7 @@ import { Link } from "react-router-dom";
 import styles from "./CoOp.module.css";
 import logo from "../assets/logo.png";
 import type { IUser } from "../../../walker-backend/src/models/user";
-
-interface WalkerCall {
-    id: number;
-    petName: string;
-    job: string;
-    scheduledTime: Date;
-    request: string;
-    accepted: boolean;
-}
+import type { ICall } from "../../../walker-backend/src/models/call";
 
 interface GroupMember {
     person_name: string;
@@ -35,41 +27,20 @@ interface EventInfo {
     };
 }
 
-const pendingWalkerCalls: WalkerCall[] = [
-    {
-        id: 1,
-        petName: "Jeanie",
-        job: "Walk",
-        scheduledTime: new Date("2023-03-02T09:00:00"),
-        request:
-            "I'm working late, could Jeanie join someone on their afternoon walk please?",
-        accepted: true,
-    },
-    {
-        id: 2,
-        petName: "Bruce",
-        job: "Petsitting",
-        scheduledTime: new Date("2023-04-19T11:00:00"),
-        request:
-            "I've got a weekend trp to Buffalo, could someone watch Bruce for the weekend?",
-        accepted: false,
-    },
-];
-
-const events = pendingWalkerCalls.map(
-    ({ petName, job, scheduledTime, accepted }) => {
-        return {
-            title: `${petName} - ${job}`,
-            start: scheduledTime,
-            extendedProps: {
-                accepted,
-            },
-        };
-    }
-);
+const getCalObj = ({ activity, date, details, requester, status }: ICall) => {
+    return {
+        title: `${requester?.pet_name} - ${activity}`,
+        start: date,
+        extendedProps: {
+            accepted: status ?? false,
+            details,
+        },
+    };
+};
 
 function CoOpHome({ user }: { user: IUser }): JSX.Element {
     const [coop, setCoop] = useState();
+    const [calls, setCalls] = useState([]);
     const { id } = useParams();
 
     useEffect(() => {
@@ -83,11 +54,13 @@ function CoOpHome({ user }: { user: IUser }): JSX.Element {
             .then((data) => {
                 console.log(data);
                 setCoop(data);
+                setCalls(data?.calls);
             });
     }, []);
+
     return (
         <div className={styles.container}>
-            <div className={styles.header}>
+            <div className={styles.header} style={{ width: "100%" }}>
                 <h1 className="heading" style={{ fontSize: "60px" }}>
                     {coop?.name ?? "Co-Op"}
                 </h1>
@@ -111,18 +84,19 @@ function CoOpHome({ user }: { user: IUser }): JSX.Element {
                         Pending Walker Calls
                     </p>
                     <ul>
-                        {pendingWalkerCalls.map((call) => (
+                        {calls.map((call: ICall, index: number) => (
                             <li
-                                key={call.id}
+                                key={index}
                                 style={{
-                                    display: "inline-block",
+                                    display: "block",
                                     whiteSpace: "nowrap",
                                     marginBottom: "5px",
                                 }}
                             >
                                 <div>
-                                    <strong>{call.petName}</strong> - {call.job}{" "}
-                                    - {call.scheduledTime.toLocaleString()}
+                                    <strong>{call.requester?.pet_name}</strong>{" "}
+                                    - {call.activity} -{" "}
+                                    {new Date(call.date).toLocaleString()}
                                 </div>
                                 <div
                                     style={{
@@ -131,7 +105,7 @@ function CoOpHome({ user }: { user: IUser }): JSX.Element {
                                     }}
                                 >
                                     {" "}
-                                    "{call.request}"
+                                    "{call.details}"
                                 </div>
                                 <button
                                     className="btn"
@@ -149,7 +123,7 @@ function CoOpHome({ user }: { user: IUser }): JSX.Element {
                         plugins={[dayGridPlugin]}
                         initialView="dayGridMonth"
                         weekends={false}
-                        events={events}
+                        events={calls.map(getCalObj)}
                         eventContent={renderEventContent}
                         themeSystem="standard"
                     />

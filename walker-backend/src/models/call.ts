@@ -32,7 +32,15 @@ const callSchema = new Schema({
     min: [today, 'Date is in the past'],
     max: [maxDate, `Date is more than ${MAX_MONTH} months in the future`]
   },
+  status: {
+    type: Boolean,
+    default: false
+  },
   requester: {
+    type: User.schema,
+    unique: false
+  },
+  accepter: {
     type: User.schema,
     unique: false
   },
