@@ -11,19 +11,27 @@ class UserController {
     }
     const userObj = body.user;
 
-    const user = new User(userObj)
-    const newCoop = new CoOp({ users: [user], name: body.group })
-    newCoop.save()
+    const newCoop = new CoOp({ name: body.group });
+
+    const user = new User({ ...userObj, coop_id: newCoop._id });
+    console.log(user)
+    newCoop.users.push(user)
+
+    newCoop.save().then(() => {
+      user.save()
+        .then((resp) => {
+          res.status(200).json(resp);
+        })
+        .catch((err: Error) => {
+          console.log('user error', err)
+          return res.status(500).json(err)
+        });
+    })
       .catch((err: Error) => {
+        console.log('newcoop error', err)
         return res.status(500).json(err)
       });
-    user.save()
-      .then((resp) => {
-        res.status(200).json(resp);
-      })
-      .catch((err: Error) => {
-        return res.status(500).json(err)
-      });
+
   };
 
   public createUserJoinCoOp = async (req: Request, res: Response) => {

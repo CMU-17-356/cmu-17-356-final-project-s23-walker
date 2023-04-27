@@ -19,7 +19,7 @@ function App() {
 
     // TODO: replace this once the actual login is implemented
     // Temporarily, hardcode the default user to be logged in
-    const handleLogin = (email = "abcd@gmail.com") => {
+    const handleLogin = (email = "test@gmail.com") => {
         sessionStorage.setItem("user", email);
         getUser(email);
     };
@@ -48,14 +48,8 @@ function App() {
                     element={<Create handleLogin={handleLogin} />}
                 />
                 <Route
-                    path="/co-op-home"
-                    element={
-                        <CoOpHome
-                            userName="JohnD"
-                            petName="Buddy"
-                            groupName="Happy Paws Co-Op"
-                        />
-                    }
+                    path="/co-op-home/:id"
+                    element={<CoOpHome user={user} />}
                 />
                 <Route path="/create-walker-call" element={<WalkerCall />} />
             </Routes>
