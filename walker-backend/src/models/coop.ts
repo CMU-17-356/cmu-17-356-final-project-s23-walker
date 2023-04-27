@@ -16,9 +16,10 @@ const coopSchema = new Schema({
     type: String
   },
   calls: {
-    type: [Call.schema]
+    type: [Call.schema],
+    default: []
   }
-});
+}, { autoIndex: false });
 
 const CoOp = model<ICoOp>('CoOp', coopSchema)
 

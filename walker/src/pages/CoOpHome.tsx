@@ -6,8 +6,23 @@ import { Link } from "react-router-dom";
 
 import styles from "./CoOp.module.css";
 import logo from "../assets/logo.png";
-import type { IUser } from "../../../walker-backend/src/models/user";
-import type { ICall } from "../../../walker-backend/src/models/call";
+
+interface IUser {
+    person_name: string;
+    password: string;
+    pet_name: string;
+    email: string;
+    coop_id: string;
+}
+
+interface ICall {
+    activity: string;
+    details: string;
+    date: Date;
+    requester: IUser;
+    accepter: IUser;
+    status: boolean;
+}
 
 interface GroupMember {
     person_name: string;
@@ -44,18 +59,20 @@ function CoOpHome({ user }: { user: IUser }): JSX.Element {
     const { id } = useParams();
 
     useEffect(() => {
-        fetch(`/api/coops/${id}`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-            },
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                console.log(data);
-                setCoop(data);
-                setCalls(data?.calls);
-            });
+        if (id) {
+            fetch(`/api/coops/${id}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log(data);
+                    setCoop(data);
+                    setCalls(data?.calls);
+                });
+        }
     }, []);
 
     return (

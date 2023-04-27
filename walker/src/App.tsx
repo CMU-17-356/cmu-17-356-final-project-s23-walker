@@ -19,7 +19,7 @@ function App() {
 
     // TODO: replace this once the actual login is implemented
     // Temporarily, hardcode the default user to be logged in
-    const handleLogin = (email = "abcd@gmail.com") => {
+    const handleLogin = (email = "test@gmail.com") => {
         sessionStorage.setItem("user", email);
         getUser(email);
     };
