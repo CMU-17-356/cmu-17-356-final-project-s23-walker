@@ -51,7 +51,7 @@ function App() {
                     path="/co-op-home/:id"
                     element={<CoOpHome user={user} />}
                 />
-                <Route path="/create-walker-call" element={<WalkerCall />} />
+                <Route path="/create-walker-call" element={<WalkerCall user={user} />} />
             </Routes>
         </HashRouter>
     );
