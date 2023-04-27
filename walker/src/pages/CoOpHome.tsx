@@ -168,14 +168,16 @@ const handleDecline = (call: ICall) => {
                                 <button
                                     className="btn"
                                     style={{ marginRight: "12px", display: "inline-block" }}
+                                    onClick={() => handleAccept(call)}
                                 >
-                                    Accept Call
+                                    Accept Call {call.status ? "✅" : ""}
                                 </button>
                                 <button
                                     className="btn"
                                     style={{ display: "inline-block" }}
+                                    onClick={() => handleDecline(call)}
                                 >
-                                    Decline Call
+                                    Decline Call {call.status ? "✅" : ""}
                                 </button>
                             </li>
                         ))}
