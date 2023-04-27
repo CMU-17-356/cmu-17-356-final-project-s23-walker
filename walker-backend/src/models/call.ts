@@ -4,6 +4,7 @@ import { User, IUser } from './user.js';
 const MAX_MONTH = 3 //number of months in advance users can set a walker call
 
 interface ICall {
+  id: string,
   activity: string,
   details: string,
   date: Date,
@@ -18,6 +19,11 @@ const maxDate = new Date(today)
 maxDate.setMonth(maxDate.getMonth() + MAX_MONTH);
 
 const callSchema = new Schema({
+  id: {
+    type: String,
+    required: true,
+    unique: true
+  },
   activity: {
     type: String,
     required: true,

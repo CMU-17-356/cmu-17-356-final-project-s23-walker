@@ -16,6 +16,7 @@ interface IUser {
 }
 
 interface ICall {
+    id: string;
     activity: string;
     details: string;
     date: Date;
@@ -75,6 +76,46 @@ function CoOpHome({ user }: { user: IUser }): JSX.Element {
         }
     }, []);
 
+const handleAccept = (call: ICall) => {
+    fetch(`/api/calls/${call.id}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ status: true }),
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            const updatedCalls = calls.map((c: ICall) => {
+                if (c.id === call.id) {
+                    c.status = true;
+                }
+                return c;
+            });
+            setCalls(updatedCalls);
+        })
+        .catch((error) => {
+            console.error("Error accepting call:", error);
+        });
+};
+const handleDecline = (call: ICall) => {
+    fetch(`/api/calls/${call.id}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ status: false }),
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            const updatedCalls = calls.filter((c: ICall) => c.id !== call.id);
+            setCalls(updatedCalls);
+        })
+        .catch((error) => {
+            console.error("Error declining call:", error);
+        });
+};
+        
     return (
         <div className={styles.container}>
             <div className={styles.header} style={{ width: "100%" }}>
@@ -126,9 +167,15 @@ function CoOpHome({ user }: { user: IUser }): JSX.Element {
                                 </div>
                                 <button
                                     className="btn"
-                                    style={{ display: "inline-block" }}
+                                    style={{ marginRight: "12px", display: "inline-block" }}
                                 >
                                     Accept Call
+                                </button>
+                                <button
+                                    className="btn"
+                                    style={{ display: "inline-block" }}
+                                >
+                                    Decline Call
                                 </button>
                             </li>
                         ))}
