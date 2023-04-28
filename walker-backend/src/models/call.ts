@@ -29,6 +29,7 @@ const callSchema = new Schema({
   date: {
     type: Date,
     default: () => new Date(Date.now()),
+    min: [today, 'Date is in the past'],
     max: [maxDate, `Date is more than ${MAX_MONTH} months in the future`]
   },
   status: {
