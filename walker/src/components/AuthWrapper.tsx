@@ -4,9 +4,10 @@ import { Outlet, useNavigate } from "react-router-dom";
 function AuthWrapper() {
     const navigate = useNavigate()
     const token = sessionStorage.getItem("token");
+    const BACKEND_URL = process.env.REACT_APP_PROD === "true" ? process.env.REACT_APP_BACKEND_URL_PROD : process.env.REACT_APP_BACKEND_URL_DEV
     useEffect(() => {
         if (token) {
-            fetch("/api/auth/validate", {
+            fetch(`${BACKEND_URL}/auth/validate`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -30,7 +31,7 @@ function AuthWrapper() {
         } else {
             navigate(`/login`)
         }
-    }, [navigate, token]);
+    }, [navigate, token, BACKEND_URL]);
     return(
         <div>
             <Outlet/>

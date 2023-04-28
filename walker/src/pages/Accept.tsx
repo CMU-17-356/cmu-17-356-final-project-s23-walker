@@ -6,6 +6,7 @@ import handleLogin from "../components/handleLogin";
 function Accept(): JSX.Element {
     const navigate = useNavigate();
     const { coop_id } = useParams();
+    const BACKEND_URL = process.env.REACT_APP_PROD === "true" ? process.env.REACT_APP_BACKEND_URL_PROD : process.env.REACT_APP_BACKEND_URL_DEV
     const handleSubmit = async (event: any) => {
         if (coop_id) {
             event.preventDefault();
@@ -15,7 +16,7 @@ function Accept(): JSX.Element {
             const password = formData.get("password");
             const person_name = formData.get("name");
             const pet_name = formData.get("pet_name");
-            const res = await fetch("/api/users/joincoop", {
+            const res = await fetch(`${BACKEND_URL}/users/joincoop`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

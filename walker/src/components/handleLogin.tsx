@@ -1,10 +1,11 @@
 
 async function handleLogin (userEmail : string, userPassword : string) : Promise<string | undefined> {
+    const BACKEND_URL = process.env.REACT_APP_PROD === "true" ? process.env.REACT_APP_BACKEND_URL_PROD : process.env.REACT_APP_BACKEND_URL_DEV
     const getUser = async (email: string) => {
-        const response = await fetch(`/api/users/${email}`);
+        const response = await fetch(`${BACKEND_URL}/users/${email}`);
         return response
     };
-    const login = fetch("/api/auth/login", {
+    const login = fetch(`${BACKEND_URL}/auth/login`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",

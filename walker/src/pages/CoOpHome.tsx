@@ -57,10 +57,10 @@ function CoOpHome({ user }: { user: IUser }): JSX.Element {
     const [coop, setCoop] = useState();
     const [calls, setCalls] = useState([]);
     const { id } = useParams();
-
+    const BACKEND_URL = process.env.REACT_APP_PROD === "true" ? process.env.REACT_APP_BACKEND_URL_PROD : process.env.REACT_APP_BACKEND_URL_DEV
     useEffect(() => {
         if (id) {
-            fetch(`/api/coops/${id}`, {
+            fetch(`${BACKEND_URL}/coops/${id}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -73,7 +73,7 @@ function CoOpHome({ user }: { user: IUser }): JSX.Element {
                     setCalls(data?.calls);
                 });
         }
-    }, []);
+    }, [id, BACKEND_URL]);
 
     return (
         <div className={styles.container}>

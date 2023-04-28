@@ -5,6 +5,7 @@ import logo from "../assets/logo.png";
 import handleLogin from "../components/handleLogin";
 
 function Create(): JSX.Element {
+    const BACKEND_URL = process.env.REACT_APP_PROD === "true" ? process.env.REACT_APP_BACKEND_URL_PROD : process.env.REACT_APP_BACKEND_URL_DEV
     const navigate = useNavigate();
     const handleSubmit = async (event: any) => {
         event.preventDefault();
@@ -17,7 +18,7 @@ function Create(): JSX.Element {
         const pet_name = formData.get("pet_name");
         const group = formData.get("group");
 
-        const response = await fetch("/api/users/createandjoin", {
+        const response = await fetch(`${BACKEND_URL}/users/createandjoin`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

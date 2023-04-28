@@ -10,18 +10,15 @@ import { useNavigate } from "react-router-dom";
 
 function WalkerCall({ user }: { user: any }): JSX.Element {
     const navigate = useNavigate();
-
+    const BACKEND_URL = process.env.REACT_APP_PROD === "true" ? process.env.REACT_APP_BACKEND_URL_PROD : process.env.REACT_APP_BACKEND_URL_DEV
     const handleSubmit = async (event: any) => {
         event.preventDefault();
         const formData = new FormData(event.target);
-
         const activity = formData.get("activity");
         const date = formData.get("datetime");
         const details = formData.get("request");
-
-
         try {
-            const response = await fetch("/api/calls", {
+            const response = await fetch(`${BACKEND_URL}/calls`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
