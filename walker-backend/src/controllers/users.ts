@@ -14,6 +14,7 @@ class UserController {
     const newCoop = new CoOp({ name: body.group });
 
     const user = new User({ ...userObj, coop_id: newCoop._id });
+    console.log(user)
     newCoop.users.push(user)
     user.setPassword(userObj.password)
     newCoop.save().then(() => {
@@ -36,19 +37,16 @@ class UserController {
   public createUserJoinCoOp = async (req: Request, res: Response) => {
     const body = req.body
     const coop = await CoOp.findById(req.body.coop)
-    const userObj = body.user
     if (coop) {
-      console.log(userObj)
-      const user = new User({person_name: userObj.person_name,
-        pet_name: userObj.pet_name,
-        email: userObj.email,
-        coop_id: req.body.coop})
-      user.setPassword(userObj.password)
+      const user = new User({person_name: body.person_name,
+        pet_name: body.pet_name,
+        email: body.email})
+      user.setPassword(body.password)
       coop.users.push(user)
       await coop.save()
       user.save()
         .then(() => {
-          return res.status(200).json(`User with email ${body.email} joined co-op successfully.`);
+          res.status(200).json(`User with email ${body.email} joined co-op successfully.`);
         })
         .catch((err: Error) => {
           return res.status(500).json(err)
@@ -58,8 +56,8 @@ class UserController {
 
   public getUserByEmail = async (req: Request, res: Response) => {
     const email = req.params.email
-    User.findOne({ email: email }).select('-hash -salt')
-      .then((user) => {
+    User.findOne({ email: email })
+      .then((user: IUser | null) => {
         if (user) {
           return res.status(200).json(user)
         }
@@ -71,7 +69,7 @@ class UserController {
   };
 
   public getAllUsers = async (req: Request, res: Response) => {
-    User.find({}).select('-hash -salt')
+    User.find({})
       .then((users: IUser[]) => {
         return res.status(200).json(users)
       })
