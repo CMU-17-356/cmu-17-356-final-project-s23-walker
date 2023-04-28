@@ -6,7 +6,6 @@ import Create from "./pages/Create";
 import Accept from "./pages/Accept";
 import CoOpHome from "./pages/CoOpHome";
 import WalkerCall from "./pages/WalkerCall";
-import handleLogin from "./components/handleLogin";
 import AuthWrapper from "./components/AuthWrapper";
 import { useEffect } from "react";
 
@@ -24,14 +23,14 @@ function App() {
     return (
         <HashRouter>
             <Routes>
+                <Route path="/" element={<Landing />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/accept-invite/:coop_id" element={<Accept />} />
+                <Route
+                    path="/create-co-op"
+                    element={<Create />}
+                />
                 <Route element={<AuthWrapper />}>
-                    <Route path="/" element={<Landing />} />
-                    <Route path="/login" element={<Login handleLogin={handleLogin}/>} />
-                    <Route path="/accept-invite" element={<Accept />} />
-                    <Route
-                        path="/create-co-op"
-                        element={<Create handleLogin={handleLogin} />}
-                    />
                     <Route
                         path="/co-op-home/:id"
                         element={<CoOpHome user={user} />}

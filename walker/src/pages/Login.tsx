@@ -2,12 +2,9 @@ import styles from "./Login.module.css";
 import logo from "../assets/logo.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import handleLogin from "../components/handleLogin";
 
-type LoginProps = {
-    handleLogin : (email: string, password: string) => Promise<string | undefined>
-}
-
-function Login(props : LoginProps): JSX.Element {
+function Login(): JSX.Element {
     const navigate = useNavigate();
     const handleSubmit = async (event: any) => {
         event.preventDefault();
@@ -15,8 +12,8 @@ function Login(props : LoginProps): JSX.Element {
         // access the form values using the "get" method of the FormData object
         const email = formData.get("email");
         const password = formData.get("password");
-        props.handleLogin(email as string, password as string).then((success) => {
-            success ? navigate(`/co-op-home/${success}`) : alert('Login failed')
+        handleLogin(email as string, password as string).then((success) => {
+            success ? navigate(`/co-op-home/${success}`) : alert('Login failed in login')
         })
     };
 
