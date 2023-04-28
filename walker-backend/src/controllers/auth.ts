@@ -11,6 +11,7 @@ class AuthController {
         if (user) { 
           if (user.validPassword(req.body.password)) { 
               const secret_key = process.env.JWT_SECRET_KEY
+              console.log(secret_key)
               if (secret_key !== undefined) {
                 const newToken = jwt.sign({ public: 'pomeranian' }, secret_key, { expiresIn: EXPIRATION_IN_SECONDS });
                 return res.status(200).send({ 

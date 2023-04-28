@@ -14,7 +14,6 @@ class UserController {
     const newCoop = new CoOp({ name: body.group });
 
     const user = new User({ ...userObj, coop_id: newCoop._id });
-    console.log(user)
     newCoop.users.push(user)
     user.setPassword(userObj.password)
     newCoop.save().then(() => {
@@ -56,8 +55,8 @@ class UserController {
 
   public getUserByEmail = async (req: Request, res: Response) => {
     const email = req.params.email
-    User.findOne({ email: email })
-      .then((user: IUser | null) => {
+    User.findOne({ email: email }).select('-hash -salt')
+      .then((user) => {
         if (user) {
           return res.status(200).json(user)
         }
@@ -69,7 +68,7 @@ class UserController {
   };
 
   public getAllUsers = async (req: Request, res: Response) => {
-    User.find({})
+    User.find({}).select('-hash -salt')
       .then((users: IUser[]) => {
         return res.status(200).json(users)
       })
