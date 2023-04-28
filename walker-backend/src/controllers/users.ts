@@ -36,16 +36,19 @@ class UserController {
   public createUserJoinCoOp = async (req: Request, res: Response) => {
     const body = req.body
     const coop = await CoOp.findById(req.body.coop)
+    const userObj = body.user
     if (coop) {
-      const user = new User({person_name: body.person_name,
-        pet_name: body.pet_name,
-        email: body.email})
-      user.setPassword(body.password)
+      console.log(userObj)
+      const user = new User({person_name: userObj.person_name,
+        pet_name: userObj.pet_name,
+        email: userObj.email,
+        coop_id: req.body.coop})
+      user.setPassword(userObj.password)
       coop.users.push(user)
       await coop.save()
       user.save()
         .then(() => {
-          res.status(200).json(`User with email ${body.email} joined co-op successfully.`);
+          return res.status(200).json(`User with email ${body.email} joined co-op successfully.`);
         })
         .catch((err: Error) => {
           return res.status(500).json(err)
