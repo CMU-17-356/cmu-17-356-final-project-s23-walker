@@ -3,6 +3,9 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import { router } from './routes/routes.js';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 // Initialize the express engine
 const app: express.Application = express();
