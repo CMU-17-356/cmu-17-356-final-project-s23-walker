@@ -2,15 +2,11 @@ import { useNavigate } from "react-router-dom";
 
 import styles from "./Login.module.css";
 import logo from "../assets/logo.png";
+import handleLogin from "../components/handleLogin";
 
-function Create({
-    handleLogin,
-}: {
-    handleLogin: (email?: string) => void;
-}): JSX.Element {
+function Create(): JSX.Element {
     const navigate = useNavigate();
     const handleSubmit = async (event: any) => {
-        console.log(event.target);
         event.preventDefault();
         const formData = new FormData(event.target);
 
@@ -37,9 +33,9 @@ function Create({
             }),
         });
         const data = await response.json();
-        console.log(data);
-        handleLogin(data.email);
-        navigate(`/co-op-home/${data.coop_id}`);
+        handleLogin(email as string, password as string).then((success) => {
+            success ? navigate(`/co-op-home/${data.coop_id}`) : alert('Login failed in create')
+        })
     };
 
     return (

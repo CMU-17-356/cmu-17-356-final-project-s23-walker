@@ -42,7 +42,7 @@ const userSchema = new Schema<IUser, UserModel, IUserMethods>({
 });
 
 // Method to set salt and hash the password for a user 
-userSchema.method('setPassword', function setPasword(password : string) { 
+userSchema.method('setPassword', function setPassword(password : string) { 
      this.salt = randomBytes(16).toString('hex'); 
      this.hash = pbkdf2Sync(password, this.salt,  
      200, 64, `sha512`).toString(`hex`); 
