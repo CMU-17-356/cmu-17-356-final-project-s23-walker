@@ -3,11 +3,11 @@ import { useNavigate } from "react-router-dom";
 import styles from "./Login.module.css";
 import logo from "../assets/logo.png";
 
-function Create({
-    handleLogin,
-}: {
-    handleLogin: (email?: string) => void;
-}): JSX.Element {
+type CreateProps = {
+    handleLogin: (email: string, password: string) => Promise<string | undefined>;
+}
+
+function Create(props: CreateProps): JSX.Element {
     const navigate = useNavigate();
     const handleSubmit = async (event: any) => {
         console.log(event.target);
@@ -37,9 +37,9 @@ function Create({
             }),
         });
         const data = await response.json();
-        console.log(data);
-        handleLogin(data.email);
-        navigate(`/co-op-home/${data.coop_id}`);
+        props.handleLogin(email as string, password as string).then((success) => {
+            success ? navigate(`/co-op-home/${data.coop_id}`) : alert('Login failed')
+        })
     };
 
     return (
