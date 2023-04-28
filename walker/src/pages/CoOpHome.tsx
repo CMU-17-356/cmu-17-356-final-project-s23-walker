@@ -84,7 +84,7 @@ function CoOpHome({ user }: { user: IUser }): JSX.Element {
                 <img
                     src={logo}
                     alt="Walker logo"
-                    style={{ width: "120px", height: "120px" }}
+                    style={{ width: "220px", height: "220px" }}
                 />
                 <div className={styles.welcome}>
                     <p className={"subheading"} style={{ fontSize: "36px" }}>
