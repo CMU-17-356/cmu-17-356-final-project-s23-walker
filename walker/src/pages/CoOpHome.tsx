@@ -114,22 +114,17 @@ function CoOpHome({ user }: { user: IUser }): JSX.Element {
                                     <strong>{call.requester?.pet_name}</strong>{" "}
                                     - {call.activity} -{" "}
                                     {new Date(call.date).toLocaleString()}
-                                </div>
-                                <div
-                                    style={{
-                                        display: "inline-block",
-                                        marginRight: "10px",
-                                    }}
-                                >
+                                
                                     {" "}
                                     "{call.details}"
-                                </div>
+                                
                                 <button
                                     className="btn"
                                     style={{ display: "inline-block" }}
                                 >
                                     Accept Call
                                 </button>
+                                </div>
                             </li>
                         ))}
                     </ul>
