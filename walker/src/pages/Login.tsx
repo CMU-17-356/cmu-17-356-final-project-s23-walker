@@ -17,13 +17,13 @@ function Login(): JSX.Element {
         })
     };
 
-    useEffect(() => {
-        const sessionUser = sessionStorage.getItem("user");
-        if (sessionUser !== null) {
-            const user = JSON.parse(sessionUser)
-            navigate(`/co-op-home/${user.coop_id}`)
-        }
-    }, [navigate])
+    // useEffect(() => {
+    //     const sessionUser = sessionStorage.getItem("user");
+    //     if (sessionUser !== null) {
+    //         const user = JSON.parse(sessionUser)
+    //         navigate(`/co-op-home/${user.coop_id}`)
+    //     }
+    // }, [navigate])
     
     return (
         <div className={styles.container}>
