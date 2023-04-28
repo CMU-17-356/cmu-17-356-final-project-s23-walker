@@ -84,7 +84,7 @@ function CoOpHome({ user }: { user: IUser }): JSX.Element {
                 <img
                     src={logo}
                     alt="Walker logo"
-                    style={{ width: "120px", height: "120px" }}
+                    style={{ width: "220px", height: "220px" }}
                 />
                 <div className={styles.welcome}>
                     <p className={"subheading"} style={{ fontSize: "36px" }}>
@@ -114,22 +114,17 @@ function CoOpHome({ user }: { user: IUser }): JSX.Element {
                                     <strong>{call.requester?.pet_name}</strong>{" "}
                                     - {call.activity} -{" "}
                                     {new Date(call.date).toLocaleString()}
-                                </div>
-                                <div
-                                    style={{
-                                        display: "inline-block",
-                                        marginRight: "10px",
-                                    }}
-                                >
+                                
                                     {" "}
                                     "{call.details}"
-                                </div>
+                                
                                 <button
                                     className="btn"
                                     style={{ display: "inline-block" }}
                                 >
                                     Accept Call
                                 </button>
+                                </div>
                             </li>
                         ))}
                     </ul>
