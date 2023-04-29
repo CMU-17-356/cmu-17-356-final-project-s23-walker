@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import styles from "./CoOp.module.css";
 import logo from "../assets/logo.png";
 
+import axios from "axios";
 interface IUser {
     person_name: string;
     password: string;
@@ -75,6 +76,30 @@ function CoOpHome({ user }: { user: IUser }): JSX.Element {
         }
     }, []);
 
+    // const handleAcceptCall = () => {
+    //     fetch(`/api/calls/${id}`, {
+    //         method: "PUT",
+    //         headers: {
+    //             "Content-Type": "application/json",
+    //         },
+    //         body: JSON.stringify({
+    //             accepter: user,
+    //         }),
+    //     })
+    //         .then((response) => response.json())
+    //         .then((data) => {
+    //             console.log(data);
+    //             setCalls(data);
+    //         });
+    // };
+
+    function handleAcceptCall(call : ICall, id : IUser) {
+        console.log(call);
+
+    }
+
+
+
     return (
         <div className={styles.container}>
             <div className={styles.header} style={{ width: "100%" }}>
@@ -121,6 +146,7 @@ function CoOpHome({ user }: { user: IUser }): JSX.Element {
                                 <button
                                     className="btn"
                                     style={{ display: "inline-block" }}
+                                    onClick={() => handleAcceptCall(call, call.requester)}
                                 >
                                     Accept Call
                                 </button>
