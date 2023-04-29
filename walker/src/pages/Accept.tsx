@@ -7,7 +7,6 @@ import { BACKEND_URL } from "../assets/constants";
 function Accept(): JSX.Element {
     const navigate = useNavigate();
     const { coop_id } = useParams();
-
     const handleSubmit = async (event: any) => {
         if (coop_id) {
             event.preventDefault();
@@ -17,7 +16,7 @@ function Accept(): JSX.Element {
             const password = formData.get("password");
             const person_name = formData.get("name");
             const pet_name = formData.get("pet_name");
-            const res = await fetch(`${BACKEND_URL}/users/joincoop`, {
+            await fetch(`${BACKEND_URL}/users/joincoop`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
