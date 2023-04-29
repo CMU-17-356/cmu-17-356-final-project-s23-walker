@@ -2,16 +2,12 @@ import { useNavigate } from "react-router-dom";
 
 import styles from "./Login.module.css";
 import logo from "../assets/logo.png";
-import { Link } from "react-router-dom";
+import handleLogin from "../components/handleLogin";
 
-function Create({
-    handleLogin,
-}: {
-    handleLogin: (email?: string) => void;
-}): JSX.Element {
+function Create(): JSX.Element {
+    const BACKEND_URL = process.env.REACT_APP_PROD === "true" ? process.env.REACT_APP_BACKEND_URL_PROD : process.env.REACT_APP_BACKEND_URL_DEV
     const navigate = useNavigate();
     const handleSubmit = async (event: any) => {
-        console.log(event.target);
         event.preventDefault();
         const formData = new FormData(event.target);
 
@@ -22,25 +18,25 @@ function Create({
         const pet_name = formData.get("pet_name");
         const group = formData.get("group");
 
-        const response = await fetch("/api/users/createandjoin", {
+        const response = await fetch(`${BACKEND_URL}/users/createandjoin`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
                 user: {
-                    email,
-                    password,
-                    person_name,
-                    pet_name,
+                    email : email,
+                    password : password,
+                    person_name : person_name,
+                    pet_name : pet_name,
                 },
-                group,
+                group : group,
             }),
         });
         const data = await response.json();
-        console.log(data);
-        handleLogin(data.email);
-        navigate("/co-op-home");
+        handleLogin(email as string, password as string).then((success) => {
+            success ? navigate(`/co-op-home/${data.coop_id}`) : alert('Login failed in create')
+        })
     };
 
     return (

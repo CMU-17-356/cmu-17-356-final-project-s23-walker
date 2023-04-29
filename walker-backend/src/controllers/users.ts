@@ -9,38 +9,58 @@ class UserController {
     if (unique) {
       return res.status(400).json(`Account with email ${body.email} already exists.`)
     }
-    const user = new User({person_name: body.person_name,
+    const user = new User({
+      person_name: body.person_name,
       pet_name: body.pet_name,
-      email: body.email})
+      email: body.email
+    })
 
-    user.schema.methods.setPassword(body.password)
-    const newCoop = new CoOp({ users: [user], name: body.group })
-    newCoop.save()
+    const newCoop = new CoOp({ name: body.group });
+
+    user.setPassword(body.password)
+    newCoop.users.push(user)
+    newCoop.save().then(() => {
+      user.save()
+        .then((resp) => {
+          res.status(200).json(resp);
+        })
+        .catch((err: Error) => {
+          console.log('user error', err)
+          return res.status(500).json(err)
+        });
+    })
       .catch((err: Error) => {
+        console.log('newcoop error', err)
         return res.status(500).json(err)
       });
-    user.save()
-      .then((resp) => {
-        res.status(200).json(resp);
-      })
-      .catch((err: Error) => {
-        return res.status(500).json(err)
-      });
+
   };
 
   public createUserJoinCoOp = async (req: Request, res: Response) => {
     const body = req.body
     const coop = await CoOp.findById(req.body.coop)
+    const userObj = body.user
     if (coop) {
-      const user = new User({person_name: body.person_name,
+<<<<<<< HEAD
+      const user = new User({
+        person_name: body.person_name,
         pet_name: body.pet_name,
-        email: body.email})
+        email: body.email
+      })
       user.schema.methods.setPassword(body.password)
+=======
+      console.log(userObj)
+      const user = new User({person_name: userObj.person_name,
+        pet_name: userObj.pet_name,
+        email: userObj.email,
+        coop_id: req.body.coop})
+      user.setPassword(userObj.password)
+>>>>>>> 5212c7e7b5ef96f016f4fb392ce938ae092d8efd
       coop.users.push(user)
       await coop.save()
       user.save()
         .then(() => {
-          res.status(200).json(`User with email ${body.email} joined co-op successfully.`);
+          return res.status(200).json(`User with email ${body.email} joined co-op successfully.`);
         })
         .catch((err: Error) => {
           return res.status(500).json(err)
@@ -50,8 +70,8 @@ class UserController {
 
   public getUserByEmail = async (req: Request, res: Response) => {
     const email = req.params.email
-    User.findOne({ email: email })
-      .then((user: IUser | null) => {
+    User.findOne({ email: email }).select('-hash -salt')
+      .then((user) => {
         if (user) {
           return res.status(200).json(user)
         }
@@ -63,7 +83,7 @@ class UserController {
   };
 
   public getAllUsers = async (req: Request, res: Response) => {
-    User.find({})
+    User.find({}).select('-hash -salt')
       .then((users: IUser[]) => {
         return res.status(200).json(users)
       })

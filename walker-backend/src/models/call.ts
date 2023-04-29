@@ -1,30 +1,21 @@
 import { Schema, model } from 'mongoose';
 import { User, IUser } from './user.js';
-import { CoOp, ICoOp } from './coop.js';
 
 const MAX_MONTH = 3 //number of months in advance users can set a walker call
 
 interface ICall {
   activity: string,
   details: string,
-  date : Date,
-  requester : IUser,
-  accepter : IUser,
+  date: Date,
+  requester: IUser,
+  accepter: IUser,
   status: boolean,
-  coop: ICoOp,
 }
 
-const today = new Date()
-const todayYear = today.getFullYear()
-const todayMonth = today.getMonth() + 1
-const todayDay = today.getDate()
+const today = new Date(Date.now())
 
 const maxDate = new Date(today)
 maxDate.setMonth(maxDate.getMonth() + MAX_MONTH);
-
-const maxYear = today.getFullYear()
-const maxMonth = today.getMonth() + 1
-const maxDay = today.getDate()
 
 const callSchema = new Schema({
   activity: {
@@ -38,16 +29,21 @@ const callSchema = new Schema({
   date: {
     type: Date,
     default: () => new Date(Date.now()),
-    min: [`${todayYear}-${todayMonth}-${todayDay}`, 'Date is in the past'],
-    max: [`${maxYear}-${maxMonth}-${maxDay}`, `Date is more than ${MAX_MONTH} months in the future`]
+    max: [maxDate, `Date is more than ${MAX_MONTH} months in the future`]
+  },
+  status: {
+    type: Boolean,
+    default: false
   },
   requester: {
-    type: User.schema
+    type: User.schema,
+    unique: false
   },
-  coop: {
-    type: CoOp.schema
-  }
-});
+  accepter: {
+    type: User.schema,
+    unique: false
+  },
+}, { autoIndex: false });
 
 const Call = model<ICall>('Call', callSchema)
 

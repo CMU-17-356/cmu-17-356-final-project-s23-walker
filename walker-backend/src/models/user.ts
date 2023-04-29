@@ -1,16 +1,24 @@
 import { pbkdf2Sync, randomBytes } from 'crypto';
-import { Schema, model } from 'mongoose'
+import { Model, Schema, model } from 'mongoose'
 
 //password hashing following this guide: https://www.loginradius.com/blog/engineering/password-hashing-with-nodejs/
 interface IUser {
   person_name: string,
   pet_name: string,
   email: string,
-  hash : string, 
-  salt : string 
+  coop_id: Schema.Types.ObjectId
+  hash: string,
+  salt: string
 }
 
-const userSchema = new Schema<IUser>({
+interface IUserMethods {
+  setPassword: (password: string) => void,
+  validPassword: (password: string) => boolean
+}
+
+type UserModel = Model<IUser, unknown, IUserMethods>;
+
+const userSchema = new Schema<IUser, UserModel, IUserMethods>({
   person_name: {
     type: String,
     required: true,
@@ -25,24 +33,29 @@ const userSchema = new Schema<IUser>({
     match: /^[\w-.]+@([\w-]+\.)+[\w-]{2,}$/, //email regex
     unique: true
   },
-  hash : String, 
-  salt : String 
+  coop_id: {
+    type: Schema.Types.ObjectId,
+    ref: 'CoOp',
+  },
+  hash: String,
+  salt: String
 });
 
 // Method to set salt and hash the password for a user 
-userSchema.methods.setPassword = function(password : string) { 
-     this.salt = randomBytes(16).toString('hex'); 
-     this.hash = pbkdf2Sync(password, this.salt,  
-     200, 64, `sha512`).toString(`hex`); 
- }; 
+userSchema.method('setPassword', function setPassword(password: string) {
+  this.salt = randomBytes(16).toString('hex');
+  this.hash = pbkdf2Sync(password, this.salt,
+    200, 64, `sha512`).toString(`hex`);
+})
 
- userSchema.methods.validPassword = function(password : string) { 
-     const hash = pbkdf2Sync(password,  
-     this.salt, 1000, 64, `sha512`).toString(`hex`); 
-     return this.hash === hash; 
- }; 
+userSchema.method('validPassword', function validPassword(password: string) {
+  const hash: string = pbkdf2Sync(password,
+    this.salt, 200, 64, `sha512`).toString(`hex`);
 
-const User = model<IUser>('User', userSchema)
+  return this.hash === hash;
+})
+
+const User = model<IUser, UserModel>('User', userSchema)
 
 export { User }
 export type { IUser }

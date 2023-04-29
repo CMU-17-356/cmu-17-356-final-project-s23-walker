@@ -1,63 +1,42 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { HashRouter, Route, Routes } from "react-router-dom";
-import axios from "axios";
-
 import Landing from "./pages/Landing";
 import Login from "./pages/Login";
 import Create from "./pages/Create";
 import Accept from "./pages/Accept";
 import CoOpHome from "./pages/CoOpHome";
 import WalkerCall from "./pages/WalkerCall";
+import AuthWrapper from "./components/AuthWrapper";
+import { useEffect } from "react";
 
 function App() {
-    const [user, setUser] = useState(null);
-
-    const getUser = async (email: string) => {
-        const response = await axios.get(`/api/users/${email}`);
-        setUser(response.data);
-    };
-
     // TODO: replace this once the actual login is implemented
     // Temporarily, hardcode the default user to be logged in
-    const handleLogin = (email = "abcd@gmail.com") => {
-        sessionStorage.setItem("user", email);
-        getUser(email);
-    };
+    const [user, setUser] = useState()
 
     useEffect(() => {
-        /* TODO: once backend is done, replace with post request to /login
-      & set token instead of directly setting user */
-        const storedUser = sessionStorage.getItem("user");
-        if (storedUser) {
-            getUser(storedUser);
-        } else {
-            // TODO: redirect to login page instead of directly calling
-            handleLogin();
+        const sessionUser = sessionStorage.getItem("user");
+        if (sessionUser) {
+            setUser(JSON.parse(sessionUser))
         }
-        console.log("user", user);
-    }, []);
-
+    }, [])
     return (
         <HashRouter>
             <Routes>
                 <Route path="/" element={<Landing />} />
                 <Route path="/login" element={<Login />} />
-                <Route path="/accept-invite" element={<Accept />} />
+                <Route path="/accept-invite/:coop_id" element={<Accept />} />
                 <Route
                     path="/create-co-op"
-                    element={<Create handleLogin={handleLogin} />}
+                    element={<Create />}
                 />
-                <Route
-                    path="/co-op-home"
-                    element={
-                        <CoOpHome
-                            userName="JohnD"
-                            petName="Buddy"
-                            groupName="Happy Paws Co-Op"
-                        />
-                    }
-                />
-                <Route path="/create-walker-call" element={<WalkerCall />} />
+                <Route element={<AuthWrapper />}>
+                    <Route
+                        path="/co-op-home/:id"
+                        element={<CoOpHome user={user} />}
+                    />
+                    <Route path="/create-walker-call" element={<WalkerCall user={user} />} />
+                </Route>
             </Routes>
         </HashRouter>
     );

@@ -9,7 +9,7 @@ interface IInvitation {
   inviter: IUser
 }
 
-const invitationSchema: Schema = new Schema({
+const invitationSchema = new Schema({
   coop: {
     type: CoOp.schema,
     required: true,

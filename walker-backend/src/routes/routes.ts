@@ -4,6 +4,9 @@ import { UserController } from '../controllers/users.js';
 import { InvitationController } from '../controllers/invitation.js';
 import { CoOpController } from '../controllers/coop.js';
 import { AuthController } from '../controllers/auth.js';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 const router = Router();
 

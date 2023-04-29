@@ -1,23 +1,32 @@
-import React from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
+import { Link } from "react-router-dom";
 
 import styles from "./CoOp.module.css";
 import logo from "../assets/logo.png";
-import { Link } from "react-router-dom";
 
-interface WalkerCall {
-    id: number;
-    petName: string;
-    job: string;
-    scheduledTime: Date;
-    request: string;
-    accepted: boolean;
+interface IUser {
+    person_name: string;
+    password: string;
+    pet_name: string;
+    email: string;
+    coop_id: string;
+}
+
+interface ICall {
+    activity: string;
+    details: string;
+    date: Date;
+    requester: IUser;
+    accepter: IUser;
+    status: boolean;
 }
 
 interface GroupMember {
-    dogOwnerName: string;
-    dogName: string;
+    person_name: string;
+    pet_name: string;
 }
 
 interface ExtendedProps {
@@ -33,59 +42,44 @@ interface EventInfo {
     };
 }
 
-const pendingWalkerCalls: WalkerCall[] = [
-    {
-        id: 1,
-        petName: "Jeanie",
-        job: "Walk",
-        scheduledTime: new Date("2023-03-02T09:00:00"),
-        request:
-            "I'm working late, could Jeanie join someone on their afternoon walk please?",
-        accepted: true,
-    },
-    {
-        id: 2,
-        petName: "Bruce",
-        job: "Petsitting",
-        scheduledTime: new Date("2023-04-19T11:00:00"),
-        request:
-            "I've got a weekend trp to Buffalo, could someone watch Bruce for the weekend?",
-        accepted: false,
-    },
-];
+const getCalObj = ({ activity, date, details, requester, status }: ICall) => {
+    return {
+        title: `${requester?.pet_name} - ${activity}`,
+        start: date,
+        extendedProps: {
+            accepted: status ?? false,
+            details,
+        },
+    };
+};
 
-const events = pendingWalkerCalls.map(
-    ({ petName, job, scheduledTime, accepted }) => {
-        return {
-            title: `${petName} - ${job}`,
-            start: scheduledTime,
-            extendedProps: {
-                accepted,
-            },
-        };
-    }
-);
+function CoOpHome({ user }: { user: IUser }): JSX.Element {
+    const [coop, setCoop] = useState();
+    const [calls, setCalls] = useState([]);
+    const { id } = useParams();
+    const BACKEND_URL = process.env.REACT_APP_PROD === "true" ? process.env.REACT_APP_BACKEND_URL_PROD : process.env.REACT_APP_BACKEND_URL_DEV
+    useEffect(() => {
+        if (id) {
+            fetch(`${BACKEND_URL}/coops/${id}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log(data);
+                    setCoop(data);
+                    setCalls(data?.calls);
+                });
+        }
+    }, [id, BACKEND_URL]);
 
-const groupMembers: GroupMember[] = [
-    { dogOwnerName: "Rebecca", dogName: "Jeanie" },
-    { dogOwnerName: "Alex", dogName: "Bruce" },
-    { dogOwnerName: "Susanna", dogName: "Hubble" },
-];
-
-function CoOpHome({
-    userName,
-    petName,
-    groupName,
-}: {
-    userName: string;
-    petName: string;
-    groupName: string;
-}): JSX.Element {
     return (
         <div className={styles.container}>
-            <div className={styles.header}>
+            <div className={styles.header} style={{ width: "100%" }}>
                 <h1 className="heading" style={{ fontSize: "60px" }}>
-                    {groupName}
+                    {coop?.name ?? "Co-Op"}
                 </h1>
                 <img
                     src={logo}
@@ -94,7 +88,7 @@ function CoOpHome({
                 />
                 <div className={styles.welcome}>
                     <p className={"subheading"} style={{ fontSize: "36px" }}>
-                        Welcome {userName} & {petName}!
+                        Welcome {user?.person_name} & {user?.pet_name}!
                     </p>
                     <Link
                         to="/create-walker-call"
@@ -107,18 +101,19 @@ function CoOpHome({
                         Pending Walker Calls
                     </p>
                     <ul>
-                        {pendingWalkerCalls.map((call) => (
+                        {calls.map((call: ICall, index: number) => (
                             <li
-                                key={call.id}
+                                key={index}
                                 style={{
-                                    display: "inline-block",
+                                    display: "block",
                                     whiteSpace: "nowrap",
                                     marginBottom: "5px",
                                 }}
                             >
                                 <div>
-                                    <strong>{call.petName}</strong> - {call.job}{" "}
-                                    - {call.scheduledTime.toLocaleString()}
+                                    <strong>{call.requester?.pet_name}</strong>{" "}
+                                    - {call.activity} -{" "}
+                                    {new Date(call.date).toLocaleString()}
                                 </div>
                                 <div
                                     style={{
@@ -127,7 +122,7 @@ function CoOpHome({
                                     }}
                                 >
                                     {" "}
-                                    "{call.request}"
+                                    "{call.details}"
                                 </div>
                                 <button
                                     className="btn"
@@ -145,7 +140,7 @@ function CoOpHome({
                         plugins={[dayGridPlugin]}
                         initialView="dayGridMonth"
                         weekends={false}
-                        events={events}
+                        events={calls.map(getCalObj)}
                         eventContent={renderEventContent}
                         themeSystem="standard"
                     />
@@ -156,11 +151,16 @@ function CoOpHome({
                         Group Members
                     </p>
                     <ul style={{ listStyleType: "none" }}>
-                        {groupMembers.map((member, index) => (
-                            <li key={index} style={{ paddingRight: "20px" }}>
-                                {member.dogOwnerName} & {member.dogName}
-                            </li>
-                        ))}
+                        {(coop?.users ?? []).map(
+                            (user: GroupMember, index: number) => (
+                                <li
+                                    key={index}
+                                    style={{ paddingRight: "20px" }}
+                                >
+                                    {user?.person_name} & {user?.pet_name}
+                                </li>
+                            )
+                        )}
                     </ul>
 
                     <div>
