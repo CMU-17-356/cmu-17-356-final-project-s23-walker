@@ -9,13 +9,14 @@ class UserController {
     if (unique) {
       return res.status(400).json(`Account with email ${body.email} already exists.`)
     }
+
+    const newCoop = new CoOp({ name: body.group });
     const user = new User({
       person_name: body.person_name,
       pet_name: body.pet_name,
-      email: body.email
+      email: body.email,
+      coop_id: newCoop._id
     })
-
-    const newCoop = new CoOp({ name: body.group });
 
     user.setPassword(body.password)
     newCoop.users.push(user)

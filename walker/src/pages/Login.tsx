@@ -13,8 +13,10 @@ function Login(): JSX.Element {
         const email = formData.get("email");
         const password = formData.get("password");
         handleLogin(email as string, password as string).then((success) => {
-            success ? navigate(`/co-op-home/${success}`) : alert('Login failed in login')
-        })
+            success
+                ? navigate(`/co-op-home/${success}`)
+                : alert("Login failed in login");
+        });
     };
 
     // useEffect(() => {
@@ -24,7 +26,7 @@ function Login(): JSX.Element {
     //         navigate(`/co-op-home/${user.coop_id}`)
     //     }
     // }, [navigate])
-    
+
     return (
         <div className={styles.container}>
             <img className={styles.logo} src={logo} alt="Walker logo" />

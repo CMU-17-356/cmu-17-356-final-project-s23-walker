@@ -34,11 +34,12 @@ function Create(): JSX.Element {
                 group: group,
             }),
         });
-        const data = await response.json();
-        handleLogin(email as string, password as string).then((success) => {
-            success
-                ? navigate(`/co-op-home/${data.coop_id}`)
-                : alert("Login failed in create");
+        response.json().then((data) => {
+            handleLogin(email as string, password as string).then((success) => {
+                success
+                    ? navigate(`/co-op-home/${data.coop_id}`)
+                    : alert("Login failed in create");
+            });
         });
     };
 
