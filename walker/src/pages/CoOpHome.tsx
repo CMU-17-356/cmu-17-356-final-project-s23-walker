@@ -4,6 +4,7 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import { Link } from "react-router-dom";
 
+import { BACKEND_URL } from "../assets/constants";
 import styles from "./CoOp.module.css";
 import logo from "../assets/logo.png";
 
@@ -57,7 +58,7 @@ function CoOpHome({ user }: { user: IUser }): JSX.Element {
     const [coop, setCoop] = useState();
     const [calls, setCalls] = useState([]);
     const { id } = useParams();
-    const BACKEND_URL = process.env.REACT_APP_PROD === "true" ? process.env.REACT_APP_BACKEND_URL_PROD : process.env.REACT_APP_BACKEND_URL_DEV
+
     useEffect(() => {
         if (id) {
             fetch(`${BACKEND_URL}/coops/${id}`, {
