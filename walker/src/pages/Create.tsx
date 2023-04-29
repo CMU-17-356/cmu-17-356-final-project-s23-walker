@@ -5,7 +5,10 @@ import logo from "../assets/logo.png";
 import handleLogin from "../components/handleLogin";
 
 function Create(): JSX.Element {
-    const BACKEND_URL = process.env.REACT_APP_PROD === "true" ? process.env.REACT_APP_BACKEND_URL_PROD : process.env.REACT_APP_BACKEND_URL_DEV
+    const BACKEND_URL =
+        process.env.REACT_APP_PROD === "true"
+            ? process.env.REACT_APP_BACKEND_URL_PROD
+            : process.env.REACT_APP_BACKEND_URL_DEV;
     const navigate = useNavigate();
     const handleSubmit = async (event: any) => {
         event.preventDefault();
@@ -24,19 +27,19 @@ function Create(): JSX.Element {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                user: {
-                    email : email,
-                    password : password,
-                    person_name : person_name,
-                    pet_name : pet_name,
-                },
-                group : group,
+                email: email,
+                password: password,
+                person_name: person_name,
+                pet_name: pet_name,
+                group: group,
             }),
         });
         const data = await response.json();
         handleLogin(email as string, password as string).then((success) => {
-            success ? navigate(`/co-op-home/${data.coop_id}`) : alert('Login failed in create')
-        })
+            success
+                ? navigate(`/co-op-home/${data.coop_id}`)
+                : alert("Login failed in create");
+        });
     };
 
     return (
