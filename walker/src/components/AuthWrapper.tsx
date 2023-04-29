@@ -30,7 +30,7 @@ function AuthWrapper() {
         } else {
             navigate(`/login`);
         }
-    }, [navigate, token, BACKEND_URL]);
+    }, [navigate, token]);
     return (
         <div>
             <Outlet />

@@ -74,7 +74,7 @@ function CoOpHome({ user }: { user: IUser }): JSX.Element {
                     setCalls(data?.calls);
                 });
         }
-    }, [id, BACKEND_URL]);
+    }, [id]);
 
     return (
         <div className={styles.container}>
