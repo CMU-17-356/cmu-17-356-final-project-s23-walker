@@ -53,7 +53,7 @@ const getCalObj = ({ activity, date, details, requester, status }: ICall) => {
     };
 };
 
-function CoOpHome({ user }: { user: IUser }): JSX.Element {
+function CoOpHome({ user }: { user: any }): JSX.Element {
     const [coop, setCoop] = useState();
     const [calls, setCalls] = useState([]);
     const { id } = useParams();
@@ -74,6 +74,34 @@ function CoOpHome({ user }: { user: IUser }): JSX.Element {
                 });
         }
     }, []);
+    // invite member
+    const handleInviteMember = async (event: any) => {
+        event.preventDefault();
+      
+        const emailInput = document.getElementById("email") as HTMLInputElement;
+        const email = emailInput.value;
+        const requestBody = {
+          "inviter": user._id,
+          "email": email,
+          "coop": coop
+        }
+
+        console.log(requestBody);
+      
+        try {
+          const response = await fetch("/api/invitations", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify(requestBody)
+          });
+          const data = await response.json();
+          console.log("Invitation sent:", data);
+        } catch (error) {
+          console.error("Failed to send invitation:", error);
+        }
+      };
 
     return (
         <div className={styles.container}>
@@ -184,6 +212,7 @@ function CoOpHome({ user }: { user: IUser }): JSX.Element {
                                 height: "5px",
                                 display: "inline-block",
                             }}
+                            onClick={handleInviteMember}
                         >
                             Invite Member
                         </button>
@@ -212,3 +241,4 @@ function renderEventContent(eventInfo: EventInfo) {
 }
 
 export default CoOpHome;
+

@@ -12,15 +12,17 @@ interface IInvitation {
 const invitationSchema = new Schema({
   coop: {
     type: CoOp.schema,
-    required: true,
+    unique: false
   },
   email: {
     type: String,
     required: true,
-    match: /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/, //email regex
+    unique: false,
+    match: /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/, //email regex
   },
   inviter: {
     type: User.schema,
+    unique: false,
     required: true
   }
 });
