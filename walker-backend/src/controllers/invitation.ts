@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { Invitation, IInvitation } from '../models/invitation.js';
 import { User } from '../models/user.js';
-
+import nodemailer from 'nodemailer';
 class InvitationController {
   public getInvitations = async (req: Request, res: Response) => {
     Invitation.find({})
@@ -21,6 +21,29 @@ class InvitationController {
     invitation.save()
     .then((invitation: IInvitation) => {
       // to-do: send email to invitee
+      const transporter = nodemailer.createTransport({
+        service: 'yahoo',
+        auth: {
+          user: "walkerapp123@yahoo.com",
+          pass: "key123!!!"
+        }
+      });
+      const mailOptions = {
+        from: "walkerapp123@yahoo.com",
+        to: invitation.email,
+        subject: 'You have been invited to join a Co-Op!',
+        text: `You have been invited to join a Co-Op! Click the link to join: ${invitation.link}`
+      };
+      transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+          console.log(error);
+          return res.status(500).json(error)
+        } else {
+          console.log('Email sent: ' + info.response);
+        }
+      });
+
+
       return res.status(200).json(invitation)
     })
     .catch((err: Error) => {

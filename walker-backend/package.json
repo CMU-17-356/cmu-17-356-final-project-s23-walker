@@ -22,12 +22,14 @@
         "express": "^4.18.2",
         "jsonwebtoken": "^9.0.0",
         "mocha": "^10.2.0",
-        "mongoose": "^7.0.4"
+        "mongoose": "^7.0.4",
+        "nodemailer": "^6.9.1"
     },
     "devDependencies": {
         "@types/cors": "^2.8.13",
         "@types/jsonwebtoken": "^9.0.1",
         "@types/mongoose": "^5.11.97",
+        "@types/nodemailer": "^6.4.7",
         "@typescript-eslint/eslint-plugin": "^5.58.0",
         "@typescript-eslint/parser": "^5.58.0",
         "concurrently": "^8.0.1",
