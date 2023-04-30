@@ -57,6 +57,7 @@ function CoOpHome({ user }: { user: any }): JSX.Element {
     const [coop, setCoop] = useState();
     const [calls, setCalls] = useState([]);
     const { id } = useParams();
+    const [acceptedCalls, setAcceptedCalls] = useState(new Set());
 
     const handleAcceptCall = async (call: any) => {
         try {
@@ -70,6 +71,8 @@ function CoOpHome({ user }: { user: any }): JSX.Element {
                     "call": call._id
                 }),
             });
+            setAcceptedCalls(new Set([...acceptedCalls, call._id]));
+            console.log(response);
         } catch (error) {
             console.error("Error accepting walker call", error);
         }
@@ -117,7 +120,7 @@ function CoOpHome({ user }: { user: any }): JSX.Element {
                         Pending Walker Calls
                     </p>
                     <ul>
-                        {calls.map((call: ICall, index: number) => (
+                        {calls.map((call: any, index: number) => (
                             <li
                                 key={index}
                                 style={{
@@ -133,15 +136,25 @@ function CoOpHome({ user }: { user: any }): JSX.Element {
                                 
                                     {" "}
                                     "{call.details}"
-                                
-                                <button
+                                    {acceptedCalls.has(call._id) ? (
+                                        <div>Call accepted!</div>
+                                        ) : (
+                                        <button
+                                            className="btn"
+                                            style={{ display: "inline-block" }}
+                                            onClick={() => handleAcceptCall(call)}
+                                        >
+                                            Accept Call
+                                        </button>
+                                        )}
+                                {/* <button
                                     className="btn"
                                     style={{ display: "inline-block" }}
                                     onClick={() => handleAcceptCall(call)}
                                     //onClick={handleAccept}
                                 >
                                     Accept Call
-                                </button>
+                                </button> */}
                                 </div>
                             </li>
                         ))}
