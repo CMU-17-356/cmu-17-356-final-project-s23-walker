@@ -134,7 +134,7 @@ function CoOpHome({ user }: { user: IUser }): JSX.Element {
                     <FullCalendar
                         plugins={[dayGridPlugin]}
                         initialView="dayGridMonth"
-                        weekends={false}
+                        weekends={true}
                         events={calls.map(getCalObj)}
                         eventContent={renderEventContent}
                         themeSystem="standard"
