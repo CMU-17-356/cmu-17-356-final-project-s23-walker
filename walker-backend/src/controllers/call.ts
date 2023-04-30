@@ -29,7 +29,7 @@ class CallController {
     const body = req.body
     const currAccepter = await User.findById(body.accepter)
     const currCall = await Call.findById(body.call)
-    const update = { accepter: currAccepter }
+    const update = { accepter: currAccepter, status: true}
     if (currCall) {
       currCall.updateOne(update)
         .then((currCall: ICall | null) => {
@@ -39,7 +39,6 @@ class CallController {
     else {
       return res.status(500).json(`Cannot find call with ID ${body.call}`)
     }
-
   }
 
   public getAllCalls = async (req: Request, res: Response) => {
