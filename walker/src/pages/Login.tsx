@@ -1,7 +1,6 @@
 import styles from "./Login.module.css";
 import logo from "../assets/logo.png";
-import { Link, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import handleLogin from "../components/handleLogin";
 
 function Login(): JSX.Element {
@@ -13,8 +12,10 @@ function Login(): JSX.Element {
         const email = formData.get("email");
         const password = formData.get("password");
         handleLogin(email as string, password as string).then((success) => {
-            success ? navigate(`/co-op-home/${success}`) : alert('Login failed in login')
-        })
+            success
+                ? navigate(`/co-op-home/${success}`)
+                : alert("Login failed in login");
+        });
     };
 
     // useEffect(() => {
@@ -24,7 +25,6 @@ function Login(): JSX.Element {
     //         navigate(`/co-op-home/${user.coop_id}`)
     //     }
     // }, [navigate])
-    
     return (
         <div className={styles.container}>
             <img className={styles.logo} src={logo} alt="Walker logo" />

@@ -1,9 +1,12 @@
+import { BACKEND_URL } from "../assets/constants";
 
-async function handleLogin (userEmail : string, userPassword : string) : Promise<string | undefined> {
-    const BACKEND_URL = process.env.REACT_APP_PROD === "true" ? process.env.REACT_APP_BACKEND_URL_PROD : process.env.REACT_APP_BACKEND_URL_DEV
+async function handleLogin(
+    userEmail: string,
+    userPassword: string
+): Promise<string | undefined> {
     const getUser = async (email: string) => {
         const response = await fetch(`${BACKEND_URL}/users/${email}`);
-        return response
+        return response;
     };
     const login = fetch(`${BACKEND_URL}/auth/login`, {
         method: "POST",
@@ -12,32 +15,27 @@ async function handleLogin (userEmail : string, userPassword : string) : Promise
         },
         body: JSON.stringify({
             email: userEmail,
-            password: userPassword
+            password: userPassword,
         }),
-    })
-    .then(async (res) => {
-        const status = res.status
+    }).then(async (res) => {
+        const status = res.status;
         try {
-            const resJson = await res.json()
+            const resJson = await res.json();
             if (status === 200) {
-                const token = resJson.token as string
+                const token = resJson.token as string;
                 sessionStorage.setItem("token", token);
-                const userResponse = await getUser(userEmail)
-                const user = await userResponse.json()
+                const userResponse = await getUser(userEmail);
+                const user = await userResponse.json();
                 sessionStorage.setItem("user", JSON.stringify(user));
-                return user.coop_id
+                return user.coop_id;
+            } else {
+                return undefined;
             }
-            else {
-                console.log(resJson.message)
-                return undefined
-            }
+        } catch (e) {
+            return undefined;
         }
-        catch (e) {
-            console.log(e)
-            return undefined
-        }
-    })
-    return login
+    });
+    return login;
 }
 
-export default handleLogin
+export default handleLogin;

@@ -1,10 +1,11 @@
 import { useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
+import { BACKEND_URL } from "../assets/constants";
 
 function AuthWrapper() {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
     const token = sessionStorage.getItem("token");
-    const BACKEND_URL = process.env.REACT_APP_PROD === "true" ? process.env.REACT_APP_BACKEND_URL_PROD : process.env.REACT_APP_BACKEND_URL_DEV
+
     useEffect(() => {
         if (token) {
             fetch(`${BACKEND_URL}/auth/validate`, {
@@ -13,30 +14,28 @@ function AuthWrapper() {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    token: token
+                    token: token,
                 }),
-            })
-            .then(async (res) => {
-                const status = res.status
+            }).then(async (res) => {
+                const status = res.status;
                 if (status === 200) {
-                    return true
+                    return true;
+                } else {
+                    const resJson = await res.json();
+                    console.log(resJson.message);
+                    navigate(`/login`);
+                    return false;
                 }
-                else {
-                    const resJson = await res.json()
-                    console.log(resJson.message)
-                    navigate(`/login`)
-                    return false
-                }
-            })
+            });
         } else {
-            navigate(`/login`)
+            navigate(`/login`);
         }
-    }, [navigate, token, BACKEND_URL]);
-    return(
+    }, [navigate, token]);
+    return (
         <div>
-            <Outlet/>
+            <Outlet />
         </div>
-    )
+    );
 }
 
-export default AuthWrapper
+export default AuthWrapper;

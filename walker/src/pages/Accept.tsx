@@ -2,11 +2,11 @@ import styles from "./CoOp.module.css";
 import logo from "../assets/logo.png";
 import { useNavigate, useParams } from "react-router-dom";
 import handleLogin from "../components/handleLogin";
+import { BACKEND_URL } from "../assets/constants";
 
 function Accept(): JSX.Element {
     const navigate = useNavigate();
     const { coop_id } = useParams();
-    const BACKEND_URL = process.env.REACT_APP_PROD === "true" ? process.env.REACT_APP_BACKEND_URL_PROD : process.env.REACT_APP_BACKEND_URL_DEV
     const handleSubmit = async (event: any) => {
         if (coop_id) {
             event.preventDefault();
@@ -16,25 +16,27 @@ function Accept(): JSX.Element {
             const password = formData.get("password");
             const person_name = formData.get("name");
             const pet_name = formData.get("pet_name");
-            const res = await fetch(`${BACKEND_URL}/users/joincoop`, {
+            await fetch(`${BACKEND_URL}/users/joincoop`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
                     user: {
-                        email : email,
-                        password : password,
-                        person_name : person_name,
-                        pet_name : pet_name,
+                        email: email,
+                        password: password,
+                        person_name: person_name,
+                        pet_name: pet_name,
                     },
-                    coop: coop_id
+                    coop: coop_id,
                 }),
-            })
+            });
             handleLogin(email as string, password as string).then((success) => {
-                console.log(success)
-                success ? navigate(`/co-op-home/${coop_id}`) : alert('Login failed in accept')
-            })
+                console.log(success);
+                success
+                    ? navigate(`/co-op-home/${coop_id}`)
+                    : alert("Login failed in accept");
+            });
         }
     };
     return (
