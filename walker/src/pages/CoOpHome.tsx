@@ -284,7 +284,8 @@ function CoOpHome({ user }: { user: any }): JSX.Element {
                         {openCall?.requester?.pet_name} - {openCall?.activity}
                     </Typography>
                     <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                        <p>Date: {openCall?.date}</p>
+                        <p>Date: {new Date(openCall?.date).toLocaleString()}</p>
+                        <p>Requester: {openCall?.requester?.person_name}</p>
                         <p>Details: {openCall?.details}</p>
                         {openCall?.status && (
                             <p>
