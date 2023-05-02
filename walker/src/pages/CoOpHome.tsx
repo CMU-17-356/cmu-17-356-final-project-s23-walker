@@ -3,6 +3,9 @@ import { useParams } from "react-router-dom";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import { Link } from "react-router-dom";
+import Modal from "@mui/material/Modal";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 
 import styles from "./CoOp.module.css";
 import logo from "../assets/logo.png";
@@ -31,6 +34,7 @@ interface GroupMember {
 
 interface ExtendedProps {
     accepted: boolean;
+    setOpen: () => void;
 }
 
 interface EventInfo {
@@ -42,21 +46,58 @@ interface EventInfo {
     };
 }
 
-const getCalObj = ({ activity, date, details, requester, status }: ICall) => {
-    return {
-        title: `${requester?.pet_name} - ${activity}`,
-        start: date,
-        extendedProps: {
-            accepted: status ?? false,
-            details,
-        },
-    };
+const style = {
+    position: "absolute" as "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "background.paper",
+    borderRadius: "10px",
+    boxShadow: 24,
+    p: 4,
 };
 
-function CoOpHome({ user }: { user: IUser }): JSX.Element {
+function CoOpHome({ user }: { user: any }): JSX.Element {
     const [coop, setCoop] = useState();
     const [calls, setCalls] = useState([]);
+
+    const [openCall, setOpenCall] = useState(null);
+    const handleClose = () => setOpenCall(null);
+
+    const getCalObj = (call: ICall) => {
+        return {
+            title: `${call.requester?.pet_name} - ${call.activity}`,
+            start: call.date,
+            extendedProps: {
+                accepted: call.status ?? false,
+                details: call.details,
+                setOpen: () => setOpenCall(call),
+            },
+        };
+    };
+
     const { id } = useParams();
+
+    const handleAcceptCall = async (call: any) => {
+        try {
+            const response = await fetch(`/api/calls/accept`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    accepter: user._id,
+                    call: call._id,
+                }),
+            });
+            const data = await response.json();
+            setCoop(data);
+            setCalls(data?.calls ?? []);
+        } catch (error) {
+            console.error("Error accepting walker call", error);
+        }
+    };
 
     useEffect(() => {
         if (id) {
@@ -74,7 +115,6 @@ function CoOpHome({ user }: { user: IUser }): JSX.Element {
                 });
         }
     }, []);
-
     return (
         <div className={styles.container}>
             <div className={styles.header} style={{ width: "100%" }}>
@@ -101,32 +141,67 @@ function CoOpHome({ user }: { user: IUser }): JSX.Element {
                         Pending Walker Calls
                     </p>
                     <ul>
-                        {calls.map((call: ICall, index: number) => (
-                            <li
-                                key={index}
+                        <div
+                            style={{ display: "flex", flexDirection: "column" }}
+                        >
+                            <div
                                 style={{
-                                    display: "block",
-                                    whiteSpace: "nowrap",
-                                    marginBottom: "5px",
+                                    display: "flex",
+                                    flexDirection: "row",
+                                    fontWeight: "bold",
                                 }}
                             >
-                                <div>
-                                    <strong>{call.requester?.pet_name}</strong>{" "}
-                                    - {call.activity} -{" "}
-                                    {new Date(call.date).toLocaleString()}
-                                
-                                    {" "}
-                                    "{call.details}"
-                                
-                                <button
-                                    className="btn"
-                                    style={{ display: "inline-block" }}
+                                <div style={{ flex: 1 }}>Pet Name</div>
+                                <div style={{ flex: 1 }}>Activity</div>
+                                <div style={{ flex: 1 }}>Time</div>
+                                <div style={{ flex: 2 }}>Details</div>
+                                <div style={{ flex: 1 }}>Status</div>
+                            </div>
+                            {calls.map((call: any, index: number) => (
+                                <div
+                                    key={index}
+                                    style={{
+                                        display: "flex",
+                                        flexDirection: "row",
+                                        marginBottom: "5px",
+                                    }}
                                 >
-                                    Accept Call
-                                </button>
+                                    <div style={{ flex: 1 }}>
+                                        {call.requester?.pet_name}
+                                    </div>
+                                    <div style={{ flex: 1 }}>
+                                        {call.activity}
+                                    </div>
+                                    <div style={{ flex: 1 }}>
+                                        {new Date(call.date).toLocaleString()}
+                                    </div>
+                                    <div style={{ flex: 2 }}>
+                                        {call.details}
+                                    </div>
+                                    <div style={{ flex: 1 }}>
+                                        {call.status ? (
+                                            <div
+                                                style={{
+                                                    display: "inline-block",
+                                                }}
+                                            >
+                                                Call accepted by{" "}
+                                                {call.accepter?.person_name}
+                                            </div>
+                                        ) : (
+                                            <button
+                                                className="btn"
+                                                onClick={() =>
+                                                    handleAcceptCall(call)
+                                                }
+                                            >
+                                                Accept Call
+                                            </button>
+                                        )}
+                                    </div>
                                 </div>
-                            </li>
-                        ))}
+                            ))}
+                        </div>
                     </ul>
                     <p className={"subheading"} style={{ fontSize: "36px" }}>
                         Co-Op Calendar
@@ -190,6 +265,37 @@ function CoOpHome({ user }: { user: IUser }): JSX.Element {
                     </div>
                 </div>
             </div>
+            <Modal
+                open={openCall}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+                    <Typography
+                        id="modal-modal-title"
+                        variant="h6"
+                        component="h2"
+                        style={{
+                            fontWeight: 600,
+                            color: openCall?.status ? "green" : "red",
+                        }}
+                    >
+                        {openCall?.requester?.pet_name} - {openCall?.activity}
+                    </Typography>
+                    <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                        <p>Date: {new Date(openCall?.date).toLocaleString()}</p>
+                        <p>Requester: {openCall?.requester?.person_name}</p>
+                        <p>Details: {openCall?.details}</p>
+                        {openCall?.status && (
+                            <p>
+                                Walker Call Accepter:{" "}
+                                {openCall?.accepter?.person_name}
+                            </p>
+                        )}
+                    </Typography>
+                </Box>
+            </Modal>
         </div>
     );
 }
@@ -205,6 +311,7 @@ function renderEventContent(eventInfo: EventInfo) {
                 }`,
             }}
             className={styles.event}
+            onClick={eventInfo.event.extendedProps.setOpen}
         >
             {eventInfo.timeText} <b>{eventInfo.event.title}</b>
         </p>
