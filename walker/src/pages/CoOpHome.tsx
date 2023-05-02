@@ -3,6 +3,9 @@ import { useParams } from "react-router-dom";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import { Link } from "react-router-dom";
+import Modal from "@mui/material/Modal";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 
 import styles from "./CoOp.module.css";
 import logo from "../assets/logo.png";
@@ -31,6 +34,7 @@ interface GroupMember {
 
 interface ExtendedProps {
     accepted: boolean;
+    setOpen: () => void;
 }
 
 interface EventInfo {
@@ -42,20 +46,37 @@ interface EventInfo {
     };
 }
 
-const getCalObj = ({ activity, date, details, requester, status }: ICall) => {
-    return {
-        title: `${requester?.pet_name} - ${activity}`,
-        start: date,
-        extendedProps: {
-            accepted: status ?? false,
-            details,
-        },
-    };
+const style = {
+    position: "absolute" as "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "background.paper",
+    borderRadius: "10px",
+    boxShadow: 24,
+    p: 4,
 };
 
 function CoOpHome({ user }: { user: any }): JSX.Element {
     const [coop, setCoop] = useState();
     const [calls, setCalls] = useState([]);
+
+    const [openCall, setOpenCall] = useState(null);
+    const handleClose = () => setOpenCall(null);
+
+    const getCalObj = (call: ICall) => {
+        return {
+            title: `${call.requester?.pet_name} - ${call.activity}`,
+            start: call.date,
+            extendedProps: {
+                accepted: call.status ?? false,
+                details: call.details,
+                setOpen: () => setOpenCall(call),
+            },
+        };
+    };
+
     const { id } = useParams();
 
     const handleAcceptCall = async (call: any) => {
@@ -244,6 +265,32 @@ function CoOpHome({ user }: { user: any }): JSX.Element {
                     </div>
                 </div>
             </div>
+            <Modal
+                open={openCall}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+                    <Typography
+                        id="modal-modal-title"
+                        variant="h6"
+                        component="h2"
+                    >
+                        {openCall?.requester?.pet_name} - {openCall?.activity}
+                    </Typography>
+                    <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                        <p>Date: {openCall?.date}</p>
+                        <p>Details: {openCall?.details}</p>
+                        {openCall?.status && (
+                            <p>
+                                Walker Call Accepter:{" "}
+                                {openCall?.accepter?.person_name}
+                            </p>
+                        )}
+                    </Typography>
+                </Box>
+            </Modal>
         </div>
     );
 }
@@ -259,6 +306,7 @@ function renderEventContent(eventInfo: EventInfo) {
                 }`,
             }}
             className={styles.event}
+            onClick={eventInfo.event.extendedProps.setOpen}
         >
             {eventInfo.timeText} <b>{eventInfo.event.title}</b>
         </p>
