@@ -276,6 +276,10 @@ function CoOpHome({ user }: { user: any }): JSX.Element {
                         id="modal-modal-title"
                         variant="h6"
                         component="h2"
+                        style={{
+                            fontWeight: 600,
+                            color: openCall?.status ? "green" : "red",
+                        }}
                     >
                         {openCall?.requester?.pet_name} - {openCall?.activity}
                     </Typography>
