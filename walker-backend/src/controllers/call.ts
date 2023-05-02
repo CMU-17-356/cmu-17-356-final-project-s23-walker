@@ -28,17 +28,27 @@ class CallController {
   public acceptCall = async (req: Request, res: Response) => {
     const body = req.body
     const currAccepter = await User.findById(body.accepter)
-    const currCall = await Call.findById(body.call)
-    const update = { accepter: currAccepter, status: true}
-    if (currCall) {
-      currCall.updateOne(update)
-        .then((currCall: ICall | null) => {
-          return res.status(200).json(currCall)
-        })
-    }
-    else {
-      return res.status(500).json(`Cannot find call with ID ${body.call}`)
-    }
+    const update = { accepter: currAccepter, status: true }
+    Call.findByIdAndUpdate(body.call, update).then((currCall: ICall | null) => {
+      console.log(currCall)
+      CoOp.findOneAndUpdate(
+        {
+          'calls._id': body.call,
+        },
+        {
+          $set: {
+            'calls.$.status': true,
+            'calls.$.accepter': currAccepter,
+          },
+        }, {
+        new: true,
+      }).then((data) => {
+        console.log(data);
+        return res.status(200).json(data)
+      })
+    }).catch((err: Error) => {
+      return res.status(500).json(err)
+    });
   }
 
   public getAllCalls = async (req: Request, res: Response) => {

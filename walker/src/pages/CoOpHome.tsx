@@ -57,7 +57,6 @@ function CoOpHome({ user }: { user: any }): JSX.Element {
     const [coop, setCoop] = useState();
     const [calls, setCalls] = useState([]);
     const { id } = useParams();
-    const [acceptedCalls, setAcceptedCalls] = useState(new Set());
 
     const handleAcceptCall = async (call: any) => {
         try {
@@ -67,12 +66,14 @@ function CoOpHome({ user }: { user: any }): JSX.Element {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    "accepter": user._id,
-                    "call": call._id
+                    accepter: user._id,
+                    call: call._id,
                 }),
             });
-            setAcceptedCalls(new Set([...acceptedCalls, call._id]));
-            console.log(response);
+            const data = await response.json();
+            setCoop(data);
+            setCalls(data?.calls ?? []);
+            console.log("res", data);
         } catch (error) {
             console.error("Error accepting walker call", error);
         }
@@ -120,34 +121,66 @@ function CoOpHome({ user }: { user: any }): JSX.Element {
                         Pending Walker Calls
                     </p>
                     <ul>
-
-<div style={{ display: "flex", flexDirection: "column" }}>
-  <div style={{ display: "flex", flexDirection: "row", fontWeight: "bold" }}>
-    <div style={{ flex: 1 }}>Pet Name</div>
-    <div style={{ flex: 1 }}>Activity</div>
-    <div style={{ flex: 1 }}>Time</div>
-    <div style={{ flex: 2 }}>Details</div>
-    <div style={{ flex: 1 }}>Status</div>
-  </div>
-  {calls.map((call: any, index: number) => (
-    <div key={index} style={{ display: "flex", flexDirection: "row", marginBottom: "5px" }}>
-      <div style={{ flex: 1 }}>{call.requester?.pet_name}</div>
-      <div style={{ flex: 1 }}>{call.activity}</div>
-      <div style={{ flex: 1 }}>{new Date(call.date).toLocaleString()}</div>
-      <div style={{ flex: 2 }}>{call.details}</div>
-      <div style={{ flex: 1 }}>
-        {(acceptedCalls.has(call._id))? (
-          <div style={{ display: "inline-block" }}>Call accepted!</div>
-        ) : (
-          <button className="btn" onClick={() => handleAcceptCall(call)}>
-            Accept Call
-          </button>
-        )}
-      </div>
-    </div>
-  ))}
-</div>
-
+                        <div
+                            style={{ display: "flex", flexDirection: "column" }}
+                        >
+                            <div
+                                style={{
+                                    display: "flex",
+                                    flexDirection: "row",
+                                    fontWeight: "bold",
+                                }}
+                            >
+                                <div style={{ flex: 1 }}>Pet Name</div>
+                                <div style={{ flex: 1 }}>Activity</div>
+                                <div style={{ flex: 1 }}>Time</div>
+                                <div style={{ flex: 2 }}>Details</div>
+                                <div style={{ flex: 1 }}>Status</div>
+                            </div>
+                            {calls.map((call: any, index: number) => (
+                                <div
+                                    key={index}
+                                    style={{
+                                        display: "flex",
+                                        flexDirection: "row",
+                                        marginBottom: "5px",
+                                    }}
+                                >
+                                    <div style={{ flex: 1 }}>
+                                        {call.requester?.pet_name}
+                                    </div>
+                                    <div style={{ flex: 1 }}>
+                                        {call.activity}
+                                    </div>
+                                    <div style={{ flex: 1 }}>
+                                        {new Date(call.date).toLocaleString()}
+                                    </div>
+                                    <div style={{ flex: 2 }}>
+                                        {call.details}
+                                    </div>
+                                    <div style={{ flex: 1 }}>
+                                        {call.status ? (
+                                            <div
+                                                style={{
+                                                    display: "inline-block",
+                                                }}
+                                            >
+                                                Call accepted!
+                                            </div>
+                                        ) : (
+                                            <button
+                                                className="btn"
+                                                onClick={() =>
+                                                    handleAcceptCall(call)
+                                                }
+                                            >
+                                                Accept Call
+                                            </button>
+                                        )}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
                     </ul>
                     <p className={"subheading"} style={{ fontSize: "36px" }}>
                         Co-Op Calendar
