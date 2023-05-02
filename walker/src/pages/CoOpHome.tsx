@@ -268,7 +268,7 @@ function CoOpHome({ user }: { user: any }): JSX.Element {
                 </div>
             </div>
             <Modal
-                open={openCall}
+                open={openCall != null}
                 onClose={handleClose}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
@@ -285,7 +285,10 @@ function CoOpHome({ user }: { user: any }): JSX.Element {
                     >
                         {openCall?.requester?.pet_name} - {openCall?.activity}
                     </Typography>
-                    <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                    <div
+                        id="modal-modal-description"
+                        style={{ marginTop: "2px" }}
+                    >
                         <p>Date: {new Date(openCall?.date).toLocaleString()}</p>
                         <p>Requester: {openCall?.requester?.person_name}</p>
                         <p>Details: {openCall?.details}</p>
@@ -295,7 +298,7 @@ function CoOpHome({ user }: { user: any }): JSX.Element {
                                 {openCall?.accepter?.person_name}
                             </p>
                         )}
-                    </Typography>
+                    </div>
                 </Box>
             </Modal>
         </div>
