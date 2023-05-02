@@ -73,7 +73,6 @@ function CoOpHome({ user }: { user: any }): JSX.Element {
             const data = await response.json();
             setCoop(data);
             setCalls(data?.calls ?? []);
-            console.log("res", data);
         } catch (error) {
             console.error("Error accepting walker call", error);
         }
@@ -165,7 +164,8 @@ function CoOpHome({ user }: { user: any }): JSX.Element {
                                                     display: "inline-block",
                                                 }}
                                             >
-                                                Call accepted!
+                                                Call accepted by{" "}
+                                                {call.accepter?.person_name}
                                             </div>
                                         ) : (
                                             <button
