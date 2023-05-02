@@ -31,7 +31,7 @@ app.get('/', (_req, _res) => {
 
 // Add a list of allowed origins.
 // If you have more origins you would like to add, you can add them to the array below.
-const allowedOrigins = ['http://localhost:3000', 'http://localhost:8000', 'https://cmu-17-356.github.io/cmu-17-356-final-project-s23-walker/'];
+const allowedOrigins = ['http://localhost:3000', 'http://localhost:8000', 'https://cmu-17-356.github.io'];
 
 const options: cors.CorsOptions = {
   origin: allowedOrigins
