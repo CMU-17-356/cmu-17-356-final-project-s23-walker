@@ -41,7 +41,7 @@ class UserController {
   public createUserJoinCoOp = async (req: Request, res: Response) => {
     const { body } = req
     const invitations = await Invitation.find({ email: body.email })
-    if (!invitations || invitations.length < 0) return res.status(500).json(`No invitations found for user with email ${body.email}`)
+    if (!invitations || invitations.length <= 0) return res.status(500).json(`No invitations found for user with email ${body.email}`)
     const coop_id = invitations[0].coop._id
     const coop = await CoOp.findById(coop_id)
 
@@ -59,7 +59,7 @@ class UserController {
     coop.save().then(() => {
       user.save()
         .then(() => {
-          return res.status(200).json(`User with email ${body.email} joined co-op successfully.`);
+          return res.status(200).json(coop);
         })
         .catch((err: Error) => {
           return res.status(500).json(err)
