@@ -8,13 +8,12 @@ import Accept from "./pages/Accept";
 import CoOpHome from "./pages/CoOpHome";
 import WalkerCall from "./pages/WalkerCall";
 import AuthWrapper from "./components/AuthWrapper";
+import Logout from "./components/Logout";
 
 export const UserContext = createContext();
 
 function App() {
     const [user, setUser] = useState();
-    // TODO: replace this once the actual login is implemented
-    // Temporarily, hardcode the default user to be logged in
 
     useEffect(() => {
         const sessionUser = sessionStorage.getItem("user");
@@ -24,6 +23,7 @@ function App() {
     }, []);
     return (
         <UserContext.Provider value={{ user, setUser }}>
+            <Logout />
             <HashRouter>
                 <Routes>
                     <Route path="/" element={<Landing />} />
