@@ -1,14 +1,11 @@
 import styles from "./Login.module.css";
 import logo from "../assets/logo.png";
-// import { Link } from "react-router-dom";
-import { React } from "react";
 import "react-calendar/dist/Calendar.css";
 import { useNavigate } from "react-router-dom";
 import { BACKEND_URL } from "../assets/constants";
 
 function WalkerCall({ user }: { user: any }): JSX.Element {
     const navigate = useNavigate();
-
     const handleSubmit = async (event: any) => {
         event.preventDefault();
         const formData = new FormData(event.target);

@@ -8,16 +8,14 @@ import CoOpHome from "./pages/CoOpHome";
 import WalkerCall from "./pages/WalkerCall";
 import AuthWrapper from "./components/AuthWrapper";
 import { useEffect } from "react";
+import IUser from "./types/IUser";
 
 function App() {
-    // TODO: replace this once the actual login is implemented
-    // Temporarily, hardcode the default user to be logged in
-    const [user, setUser] = useState();
-
+    const [user, setUser] = useState({} as IUser);
     useEffect(() => {
         const sessionUser = sessionStorage.getItem("user");
         if (sessionUser) {
-            setUser(JSON.parse(sessionUser));
+            setUser(JSON.parse(sessionUser) as IUser);
         }
     }, []);
     return (

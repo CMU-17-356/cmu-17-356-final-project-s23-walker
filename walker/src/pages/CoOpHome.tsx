@@ -6,46 +6,13 @@ import { Link } from "react-router-dom";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-
 import { BACKEND_URL } from "../assets/constants";
 import styles from "./CoOp.module.css";
 import logo from "../assets/logo.png";
-
-interface IUser {
-    person_name: string;
-    password: string;
-    pet_name: string;
-    email: string;
-    coop_id: string;
-}
-
-interface ICall {
-    activity: string;
-    details: string;
-    date: Date;
-    requester: IUser;
-    accepter: IUser;
-    status: boolean;
-}
-
-interface GroupMember {
-    person_name: string;
-    pet_name: string;
-}
-
-interface ExtendedProps {
-    accepted: boolean;
-    setOpen: () => void;
-}
-
-interface EventInfo {
-    timeText: string;
-    event: {
-        title: string;
-        start: Date;
-        extendedProps: ExtendedProps;
-    };
-}
+import ICall from "../types/ICall";
+import IGroupMember from "../types/IGroupMember";
+import EventInfo from "../types/EventInfo";
+import IUser from "../types/IUser";
 
 const style = {
     position: "absolute" as "absolute",
@@ -59,14 +26,17 @@ const style = {
     p: 4,
 };
 
-function CoOpHome({ user }: { user: any }): JSX.Element {
+type CoOpHomeProps = {
+    user: IUser
+}
+
+function CoOpHome(props: CoOpHomeProps): JSX.Element {
     const [coop, setCoop] = useState();
-    const [calls, setCalls] = useState([]);
-
+    const [calls, setCalls] = useState([] as ICall[]);
     const [openCall, setOpenCall] = useState(null);
+    const { id } = useParams();
     const handleClose = () => setOpenCall(null);
-
-    const getCalObj = (call: ICall) => {
+    const getCallObj = (call: ICall) => {
         return {
             title: `${call.requester?.pet_name} - ${call.activity}`,
             start: call.date,
@@ -78,23 +48,22 @@ function CoOpHome({ user }: { user: any }): JSX.Element {
         };
     };
 
-    const { id } = useParams();
-
     const handleAcceptCall = async (call: any) => {
         try {
-            const response = await fetch(`/api/calls/accept`, {
+            const response = await fetch(`${BACKEND_URL}/calls/accept`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    accepter: user._id,
+                    accepter: props.user._id,
                     call: call._id,
                 }),
             });
             const data = await response.json();
             setCoop(data);
-            setCalls(data?.calls ?? []);
+            const calls = data.calls as ICall
+            setCalls(calls ?? []);
         } catch (error) {
             console.error("Error accepting walker call", error);
         }
@@ -110,9 +79,9 @@ function CoOpHome({ user }: { user: any }): JSX.Element {
             })
                 .then((response) => response.json())
                 .then((data) => {
-                    console.log(data);
                     setCoop(data);
-                    setCalls(data?.calls);
+                    const calls = data.calls as ICall
+                    setCalls(calls ?? []);
                 });
         }
     }, [id]);
@@ -130,7 +99,7 @@ function CoOpHome({ user }: { user: any }): JSX.Element {
                 />
                 <div className={styles.welcome}>
                     <p className={"subheading"} style={{ fontSize: "36px" }}>
-                        Welcome {user?.person_name} & {user?.pet_name}!
+                        Welcome {props.user?.person_name} & {props.user?.pet_name}!
                     </p>
                     <Link
                         to="/create-walker-call"
@@ -159,7 +128,14 @@ function CoOpHome({ user }: { user: any }): JSX.Element {
                                 <div style={{ flex: 2 }}>Details</div>
                                 <div style={{ flex: 1 }}>Status</div>
                             </div>
-                            {calls.map((call: any, index: number) => (
+                            {calls.filter(function (call: ICall) {
+                                const currDate = new Date()
+                                const callDate = new Date(call.date)
+                                return(callDate.getTime() > currDate.getTime())
+                            })
+                            .map(function (call: ICall, index: number) {
+                                console.log(call.requester.email, props.user.email)
+                                return(
                                 <div
                                     key={index}
                                     style={{
@@ -196,13 +172,16 @@ function CoOpHome({ user }: { user: any }): JSX.Element {
                                                 onClick={() =>
                                                     handleAcceptCall(call)
                                                 }
+                                                style={{display: call.requester.email === props.user.email 
+                                                        ? 'none' : 'inherit'}}
                                             >
                                                 Accept Call
                                             </button>
                                         )}
                                     </div>
                                 </div>
-                            ))}
+                                )
+                            })}
                         </div>
                     </ul>
                     <p className={"subheading"} style={{ fontSize: "36px" }}>
@@ -211,8 +190,8 @@ function CoOpHome({ user }: { user: any }): JSX.Element {
                     <FullCalendar
                         plugins={[dayGridPlugin]}
                         initialView="dayGridMonth"
-                        weekends={false}
-                        events={calls.map(getCalObj)}
+                        weekends={true}
+                        events={calls.map(getCallObj)}
                         eventContent={renderEventContent}
                         themeSystem="standard"
                     />
@@ -224,7 +203,7 @@ function CoOpHome({ user }: { user: any }): JSX.Element {
                     </p>
                     <ul style={{ listStyleType: "none" }}>
                         {(coop?.users ?? []).map(
-                            (user: GroupMember, index: number) => (
+                            (user: IGroupMember, index: number) => (
                                 <li
                                     key={index}
                                     style={{ paddingRight: "20px" }}

@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-
 import styles from "./Login.module.css";
 import logo from "../assets/logo.png";
 import handleLogin from "../components/handleLogin";

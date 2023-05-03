@@ -40,16 +40,16 @@ class UserController {
   public createUserJoinCoOp = async (req: Request, res: Response) => {
     const { body } = req
     const coop = await CoOp.findById(body.coop)
-
+    console.log(JSON.stringify(body))
     if (coop) {
       console.log(body)
       const user = new User({
-        person_name: body.person_name,
-        pet_name: body.pet_name,
-        email: body.email,
+        person_name: body.user.person_name,
+        pet_name: body.user.pet_name,
+        email: body.user.email,
         coop_id: req.body.coop
       })
-      user.setPassword(body.password)
+      user.setPassword(body.user.password)
       coop.users.push(user)
       await coop.save()
       user.save()
