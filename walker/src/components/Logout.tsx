@@ -12,7 +12,7 @@ function Logout() {
     };
 
     return (
-        <div>
+        <div style={{ position: "fixed", right: "2vw", top: "2vh" }}>
             <button onClick={handleLogout} className="btn">
                 Logout
             </button>

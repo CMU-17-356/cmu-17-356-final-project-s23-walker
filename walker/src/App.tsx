@@ -23,7 +23,6 @@ function App() {
     }, []);
     return (
         <UserContext.Provider value={{ user, setUser }}>
-            <Logout />
             <HashRouter>
                 <Routes>
                     <Route path="/" element={<Landing />} />
