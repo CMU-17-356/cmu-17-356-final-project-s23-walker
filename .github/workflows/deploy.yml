@@ -41,6 +41,8 @@ jobs:
                   timeout 2m npm run build
               env:
                   CI: false
+                  REACT_APP_PROD: true
+                  REACT_APP_BACKEND_URL_PROD: https://walker-backend.fly.dev/api
 
             - uses: peaceiris/actions-gh-pages@v3
               with:

@@ -7,13 +7,13 @@ interface IUser {
   pet_name: string,
   email: string,
   coop_id: Schema.Types.ObjectId
-  hash : string, 
-  salt : string 
+  hash: string,
+  salt: string
 }
 
 interface IUserMethods {
-  setPassword: (password : string) => void,
-  validPassword: (password : string) => boolean
+  setPassword: (password: string) => void,
+  validPassword: (password: string) => boolean
 }
 
 type UserModel = Model<IUser, unknown, IUserMethods>;
@@ -37,23 +37,23 @@ const userSchema = new Schema<IUser, UserModel, IUserMethods>({
     type: Schema.Types.ObjectId,
     ref: 'CoOp',
   },
-  hash : String, 
-  salt : String 
+  hash: String,
+  salt: String
 });
 
 // Method to set salt and hash the password for a user 
-userSchema.method('setPassword', function setPasword(password : string) { 
-     this.salt = randomBytes(16).toString('hex'); 
-     this.hash = pbkdf2Sync(password, this.salt,  
-     200, 64, `sha512`).toString(`hex`); 
- })
+userSchema.method('setPassword', function setPassword(password: string) {
+  this.salt = randomBytes(16).toString('hex');
+  this.hash = pbkdf2Sync(password, this.salt,
+    200, 64, `sha512`).toString(`hex`);
+})
 
- userSchema.method('validPassword', function validPassword(password : string) { 
-     const hash : string = pbkdf2Sync(password,  
-     this.salt, 200, 64, `sha512`).toString(`hex`);
+userSchema.method('validPassword', function validPassword(password: string) {
+  const hash: string = pbkdf2Sync(password,
+    this.salt, 200, 64, `sha512`).toString(`hex`);
 
-     return this.hash === hash; 
- })
+  return this.hash === hash;
+})
 
 const User = model<IUser, UserModel>('User', userSchema)
 

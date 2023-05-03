@@ -3,6 +3,9 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import { router } from './routes/routes.js';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 // Initialize the express engine
 const app: express.Application = express();
@@ -28,7 +31,7 @@ app.get('/', (_req, _res) => {
 
 // Add a list of allowed origins.
 // If you have more origins you would like to add, you can add them to the array below.
-const allowedOrigins = ['http://localhost:3000', 'http://localhost:8000', 'https://cmu-17-356.github.io/cmu-17-356-final-project-s23-walker/'];
+const allowedOrigins = ['http://localhost:3000', 'http://localhost:8000', 'https://cmu-17-356.github.io'];
 
 const options: cors.CorsOptions = {
   origin: allowedOrigins

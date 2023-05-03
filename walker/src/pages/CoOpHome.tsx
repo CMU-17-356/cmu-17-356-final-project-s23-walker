@@ -7,6 +7,7 @@ import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
+import { BACKEND_URL } from "../assets/constants";
 import styles from "./CoOp.module.css";
 import logo from "../assets/logo.png";
 
@@ -101,7 +102,7 @@ function CoOpHome({ user }: { user: any }): JSX.Element {
 
     useEffect(() => {
         if (id) {
-            fetch(`/api/coops/${id}`, {
+            fetch(`${BACKEND_URL}/coops/${id}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -114,7 +115,8 @@ function CoOpHome({ user }: { user: any }): JSX.Element {
                     setCalls(data?.calls);
                 });
         }
-    }, []);
+    }, [id]);
+
     return (
         <div className={styles.container}>
             <div className={styles.header} style={{ width: "100%" }}>
@@ -266,7 +268,7 @@ function CoOpHome({ user }: { user: any }): JSX.Element {
                 </div>
             </div>
             <Modal
-                open={openCall}
+                open={openCall != null}
                 onClose={handleClose}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
@@ -283,7 +285,10 @@ function CoOpHome({ user }: { user: any }): JSX.Element {
                     >
                         {openCall?.requester?.pet_name} - {openCall?.activity}
                     </Typography>
-                    <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                    <div
+                        id="modal-modal-description"
+                        style={{ marginTop: "2px" }}
+                    >
                         <p>Date: {new Date(openCall?.date).toLocaleString()}</p>
                         <p>Requester: {openCall?.requester?.person_name}</p>
                         <p>Details: {openCall?.details}</p>
@@ -293,7 +298,7 @@ function CoOpHome({ user }: { user: any }): JSX.Element {
                                 {openCall?.accepter?.person_name}
                             </p>
                         )}
-                    </Typography>
+                    </div>
                 </Box>
             </Modal>
         </div>

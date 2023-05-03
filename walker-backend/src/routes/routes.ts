@@ -4,6 +4,9 @@ import { UserController } from '../controllers/users.js';
 import { InvitationController } from '../controllers/invitation.js';
 import { CoOpController } from '../controllers/coop.js';
 import { AuthController } from '../controllers/auth.js';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 const router = Router();
 
@@ -21,6 +24,7 @@ router.get('/calls', Calls.getAllCalls);
 // User routes
 router.post('/users/createandjoin', Users.createUserAndCoop);
 router.post('/users/joincoop', Users.createUserJoinCoOp);
+router.post('/auth/login', Auth.login);
 router.get('/users', Users.getAllUsers);
 router.get('/users/:email', Users.getUserByEmail);
 
