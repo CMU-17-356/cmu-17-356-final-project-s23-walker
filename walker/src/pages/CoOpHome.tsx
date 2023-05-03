@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
@@ -10,6 +10,7 @@ import Typography from "@mui/material/Typography";
 import { BACKEND_URL } from "../assets/constants";
 import styles from "./CoOp.module.css";
 import logo from "../assets/logo.png";
+import { UserContext } from "../App";
 
 interface IUser {
     person_name: string;
@@ -59,12 +60,14 @@ const style = {
     p: 4,
 };
 
-function CoOpHome({ user }: { user: any }): JSX.Element {
+function CoOpHome(): JSX.Element {
     const [coop, setCoop] = useState();
     const [calls, setCalls] = useState([]);
 
     const [openCall, setOpenCall] = useState(null);
     const handleClose = () => setOpenCall(null);
+
+    const { user } = useContext(UserContext);
 
     const getCalObj = (call: ICall) => {
         return {

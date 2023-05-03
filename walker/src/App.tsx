@@ -34,13 +34,10 @@ function App() {
                     />
                     <Route path="/create-co-op" element={<Create />} />
                     <Route element={<AuthWrapper />}>
-                        <Route
-                            path="/co-op-home/:id"
-                            element={<CoOpHome user={user} />}
-                        />
+                        <Route path="/co-op-home/:id" element={<CoOpHome />} />
                         <Route
                             path="/create-walker-call"
-                            element={<WalkerCall user={user} />}
+                            element={<WalkerCall />}
                         />
                     </Route>
                 </Routes>
