@@ -1,10 +1,14 @@
+import { useContext } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+
 import styles from "./CoOp.module.css";
 import logo from "../assets/logo.png";
-import { useNavigate, useParams } from "react-router-dom";
 import handleLogin from "../components/handleLogin";
 import { BACKEND_URL } from "../assets/constants";
+import { UserContext } from "../App";
 
 function Accept(): JSX.Element {
+    const { setUser } = useContext(UserContext);
     const navigate = useNavigate();
     const { coop_id } = useParams();
     const handleSubmit = async (event: any) => {
@@ -33,6 +37,10 @@ function Accept(): JSX.Element {
             });
             handleLogin(email as string, password as string).then((success) => {
                 console.log(success);
+                const sessionUser = sessionStorage.getItem("user");
+                if (sessionUser) {
+                    setUser(JSON.parse(sessionUser));
+                }
                 success
                     ? navigate(`/co-op-home/${coop_id}`)
                     : alert("Login failed in accept");
