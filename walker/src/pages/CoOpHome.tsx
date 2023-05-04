@@ -61,7 +61,7 @@ function CoOpHome(): JSX.Element {
             });
             const data = await response.json();
             setCoop(data);
-            const calls = data.calls as ICall
+            const calls = data.calls as ICall;
             setCalls(calls ?? []);
         } catch (error) {
             console.error("Error accepting walker call", error);
@@ -80,7 +80,7 @@ function CoOpHome(): JSX.Element {
         };
 
         console.log(requestBody);
-        fetch("/api/invitations", {
+        fetch(`${BACKEND_URL}/invitations`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -106,7 +106,7 @@ function CoOpHome(): JSX.Element {
                 .then((response) => response.json())
                 .then((data) => {
                     setCoop(data);
-                    const calls = data.calls as ICall
+                    const calls = data.calls as ICall;
                     setCalls(calls ?? []);
                 });
         }
@@ -162,62 +162,78 @@ function CoOpHome(): JSX.Element {
                                         <div style={{ flex: 2 }}>Details</div>
                                         <div style={{ flex: 1 }}>Status</div>
                                     </div>
-                                    {calls.filter(function (call: ICall) {
-                                const currDate = new Date()
-                                const callDate = new Date(call.date)
-                                return(callDate.getTime() > currDate.getTime())
-                            }).map((call: any, index: number) => (
-                                        <div
-                                            key={index}
-                                            style={{
-                                                display: "flex",
-                                                flexDirection: "row",
-                                                marginBottom: "5px",
-                                            }}
-                                        >
-                                            <div style={{ flex: 1 }}>
-                                                {call.requester?.pet_name}
+                                    {calls
+                                        .filter(function (call: ICall) {
+                                            const currDate = new Date();
+                                            const callDate = new Date(
+                                                call.date
+                                            );
+                                            return (
+                                                callDate.getTime() >
+                                                currDate.getTime()
+                                            );
+                                        })
+                                        .map((call: any, index: number) => (
+                                            <div
+                                                key={index}
+                                                style={{
+                                                    display: "flex",
+                                                    flexDirection: "row",
+                                                    marginBottom: "5px",
+                                                }}
+                                            >
+                                                <div style={{ flex: 1 }}>
+                                                    {call.requester?.pet_name}
+                                                </div>
+                                                <div style={{ flex: 1 }}>
+                                                    {call.activity}
+                                                </div>
+                                                <div style={{ flex: 1 }}>
+                                                    {new Date(
+                                                        call.date
+                                                    ).toLocaleString()}
+                                                </div>
+                                                <div style={{ flex: 2 }}>
+                                                    {call.details}
+                                                </div>
+                                                <div style={{ flex: 1 }}>
+                                                    {call.status ? (
+                                                        <div
+                                                            style={{
+                                                                display:
+                                                                    "inline-block",
+                                                            }}
+                                                        >
+                                                            Call accepted by{" "}
+                                                            {
+                                                                call.accepter
+                                                                    ?.person_name
+                                                            }
+                                                        </div>
+                                                    ) : (
+                                                        <button
+                                                            className="btn"
+                                                            onClick={() =>
+                                                                handleAcceptCall(
+                                                                    call
+                                                                )
+                                                            }
+                                                            style={{
+                                                                display:
+                                                                    call
+                                                                        .requester
+                                                                        .email ===
+                                                                    user.email
+                                                                        ? "none"
+                                                                        : "inherit",
+                                                            }}
+                                                        >
+                                                            Accept Call
+                                                        </button>
+                                                    )}
+                                                </div>
                                             </div>
-                                            <div style={{ flex: 1 }}>
-                                                {call.activity}
-                                            </div>
-                                            <div style={{ flex: 1 }}>
-                                                {new Date(
-                                                    call.date
-                                                ).toLocaleString()}
-                                            </div>
-                                            <div style={{ flex: 2 }}>
-                                                {call.details}
-                                            </div>
-                                            <div style={{ flex: 1 }}>
-                                                {call.status ? (
-                                                    <div
-                                                        style={{
-                                                            display:
-                                                                "inline-block",
-                                                        }}
-                                                    >
-                                                        Call accepted by{" "}
-                                                        {
-                                                            call.accepter
-                                                                ?.person_name
-                                                        }
-                                                    </div>
-                                                ) : (
-                                                    <button
-                                                    className="btn"
-                                                    onClick={() =>
-                                                        handleAcceptCall(call)
-                                                    }
-                                                    style={{display: call.requester.email === user.email 
-                                                            ? 'none' : 'inherit'}}
-                                                >
-                                                    Accept Call
-                                                </button>
-                                                )}
-                                            </div>
-                                        </div>
-                                    ))}
+                                        ))}
                                 </div>
                             </ul>
                         </>
