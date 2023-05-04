@@ -1,9 +1,13 @@
+import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+
+import { UserContext } from "../App";
 import styles from "./Login.module.css";
 import logo from "../assets/logo.png";
-import { useNavigate } from "react-router-dom";
 import handleLogin from "../components/handleLogin";
 
 function Login(): JSX.Element {
+    const { setUser } = useContext(UserContext);
     const navigate = useNavigate();
     const handleSubmit = async (event: any) => {
         event.preventDefault();
@@ -12,6 +16,10 @@ function Login(): JSX.Element {
         const email = formData.get("email");
         const password = formData.get("password");
         handleLogin(email as string, password as string).then((success) => {
+            const sessionUser = sessionStorage.getItem("user");
+            if (sessionUser) {
+                setUser(JSON.parse(sessionUser));
+            }
             success
                 ? navigate(`/co-op-home/${success}`)
                 : alert("Login failed in login");

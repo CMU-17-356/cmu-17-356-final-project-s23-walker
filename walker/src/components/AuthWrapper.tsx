@@ -2,6 +2,8 @@ import { useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { BACKEND_URL } from "../assets/constants";
 
+import Logout from "./Logout";
+
 function AuthWrapper() {
     const navigate = useNavigate();
     const token = sessionStorage.getItem("token");
@@ -33,6 +35,7 @@ function AuthWrapper() {
     }, [navigate, token]);
     return (
         <div>
+            <Logout />
             <Outlet />
         </div>
     );

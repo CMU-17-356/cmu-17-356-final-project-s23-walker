@@ -1,10 +1,14 @@
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+
 import styles from "./Login.module.css";
 import logo from "../assets/logo.png";
 import handleLogin from "../components/handleLogin";
 import { BACKEND_URL } from "../assets/constants";
+import { UserContext } from "../App";
 
 function Create(): JSX.Element {
+    const { setUser } = useContext(UserContext);
     const navigate = useNavigate();
     const handleSubmit = async (event: any) => {
         event.preventDefault();
@@ -32,6 +36,10 @@ function Create(): JSX.Element {
         });
         response.json().then((data) => {
             handleLogin(email as string, password as string).then((success) => {
+                const sessionUser = sessionStorage.getItem("user");
+                if (sessionUser) {
+                    setUser(JSON.parse(sessionUser));
+                }
                 success
                     ? navigate(`/co-op-home/${data.coop_id}`)
                     : alert("Login failed in create");
