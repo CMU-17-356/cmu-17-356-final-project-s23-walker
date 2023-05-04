@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useContext } from "react";
 
 import { UserContext } from "../App";
@@ -63,6 +63,9 @@ function Login(): JSX.Element {
                 <button type="submit" className="btn">
                     Login
                 </button>
+                <Link to="/" className="btn">
+                    Return Home
+                </Link>
             </form>
         </div>
     );

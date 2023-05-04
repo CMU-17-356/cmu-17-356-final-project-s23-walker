@@ -57,7 +57,9 @@ code {
     min-width: 10vw;
     text-align: center;
     border: none;
-    cursor:pointer;
+    cursor: pointer;
+    font-size: 20px;
+    margin-bottom: 1vh;
 }
 
 input[type="text"],
