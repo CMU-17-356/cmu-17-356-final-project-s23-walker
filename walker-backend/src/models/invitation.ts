@@ -17,13 +17,15 @@ const invitationSchema = new Schema({
   email: {
     type: String,
     required: true,
-    match: /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/, //email regex
+    match: /^[\w-.]+@([\w-]+\.)+[\w-]{2,}$/, //email regex,
+    unique: true
   },
   inviter: {
     type: User.schema,
-    required: true
+    required: false,
+    unique: false
   }
-});
+}, { autoIndex: false });
 
 const Invitation = model<IInvitation>('Invitation', invitationSchema)
 

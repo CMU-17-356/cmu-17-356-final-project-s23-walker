@@ -24,10 +24,7 @@ function App() {
                 <Routes>
                     <Route path="/" element={<Landing />} />
                     <Route path="/login" element={<Login />} />
-                    <Route
-                        path="/accept-invite/:coop_id"
-                        element={<Accept />}
-                    />
+                    <Route path="/accept-invite" element={<Accept />} />
                     <Route path="/create-co-op" element={<Create />} />
                     <Route element={<AuthWrapper />}>
                         <Route path="/co-op-home/:id" element={<CoOpHome />} />

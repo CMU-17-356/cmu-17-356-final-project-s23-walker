@@ -6,6 +6,7 @@ interface ICoOp {
   users: IUser[],
   calls: ICall[],
   name: string,
+  _id: string
 }
 
 const coopSchema = new Schema({

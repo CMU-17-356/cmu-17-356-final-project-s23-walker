@@ -10,42 +10,54 @@ import { UserContext } from "../App";
 function Accept(): JSX.Element {
     const { setUser } = useContext(UserContext);
     const navigate = useNavigate();
-    const { coop_id } = useParams();
+
     const handleSubmit = async (event: any) => {
-        if (coop_id) {
-            event.preventDefault();
-            const formData = new FormData(event.target);
-            // access the form values using the "get" method of the FormData object
-            const email = formData.get("email");
-            const password = formData.get("password");
-            const person_name = formData.get("name");
-            const pet_name = formData.get("pet_name");
-            await fetch(`${BACKEND_URL}/users/joincoop`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    user: {
-                        email: email,
-                        password: password,
-                        person_name: person_name,
-                        pet_name: pet_name,
-                    },
-                    coop: coop_id,
-                }),
+        event.preventDefault();
+        const formData = new FormData(event.target);
+        // access the form values using the "get" method of the FormData object
+        const email = formData.get("email");
+        const password = formData.get("password");
+        const person_name = formData.get("name");
+        const pet_name = formData.get("pet_name");
+        const response = await fetch(`${BACKEND_URL}/users/joincoop`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                email: email,
+                password: password,
+                person_name: person_name,
+                pet_name: pet_name,
+            }),
+        });
+        response
+            .json()
+            .then((data) => {
+                handleLogin(email as string, password as string).then(
+                    (success) => {
+                        console.log("coop", success, data);
+                        const sessionUser = sessionStorage.getItem("user");
+                        if (sessionUser) {
+                            setUser(JSON.parse(sessionUser));
+                        }
+                        if (!data._id && data.code === 11000) {
+                            alert("Login failed: email already exists");
+                        } else if (!data._id) {
+                            alert(
+                                "Login failed: No invite found for this email"
+                            );
+                        } else {
+                            success
+                                ? navigate(`/co-op-home/${data._id}`)
+                                : alert("Login failed in accept");
+                        }
+                    }
+                );
+            })
+            .catch((err) => {
+                alert("Account creation failed: " + err);
             });
-            handleLogin(email as string, password as string).then((success) => {
-                console.log(success);
-                const sessionUser = sessionStorage.getItem("user");
-                if (sessionUser) {
-                    setUser(JSON.parse(sessionUser));
-                }
-                success
-                    ? navigate(`/co-op-home/${coop_id}`)
-                    : alert("Login failed in accept");
-            });
-        }
     };
     return (
         <div className={styles.container}>
