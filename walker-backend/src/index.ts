@@ -15,7 +15,7 @@ const port = 8000;
 const dbUrl = 'mongodb+srv://pkaufhol:10002000@walker.63wphpg.mongodb.net/test' //should be 'mongodb+srv://pkaufhol:<9oFW9kKmDwsz6Fff>@walker.63wphpg.mongodb.net/test'
 
 mongoose
-  .connect(dbUrl)
+  .connect(dbUrl, { autoIndex: false })
   .catch(e => {
     console.error('Connection error', e.message)
   });

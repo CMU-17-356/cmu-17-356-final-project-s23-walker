@@ -22,7 +22,8 @@ const invitationSchema = new Schema({
   },
   inviter: {
     type: User.schema,
-    required: false
+    required: false,
+    unique: false
   }
 }, { autoIndex: false });
 
