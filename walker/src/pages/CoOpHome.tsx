@@ -103,6 +103,33 @@ function CoOpHome(): JSX.Element {
         }
     };
 
+    const handleInviteMember = async (event: any) => {
+        event.preventDefault();
+
+        const emailInput = document.getElementById("email") as HTMLInputElement;
+        const email = emailInput.value;
+        const requestBody = {
+            inviter: user._id,
+            email: email,
+            coop: user.coop_id,
+        };
+
+        console.log(requestBody);
+        fetch("/api/invitations", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(requestBody),
+        })
+            .then(() => {
+                alert(`Invitation sent to ${email}!`);
+            })
+            .catch((error) => {
+                console.error("Failed to send invitation:", error);
+            });
+    };
+
     useEffect(() => {
         if (id) {
             fetch(`${BACKEND_URL}/coops/${id}`, {
@@ -282,6 +309,7 @@ function CoOpHome(): JSX.Element {
                                 height: "5px",
                                 display: "inline-block",
                             }}
+                            onClick={handleInviteMember}
                         >
                             Invite Member
                         </button>

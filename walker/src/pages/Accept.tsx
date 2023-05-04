@@ -31,16 +31,20 @@ function Accept(): JSX.Element {
                 pet_name: pet_name,
             }),
         });
-        handleLogin(email as string, password as string).then((success) => {
-            console.log(success);
-            const sessionUser = sessionStorage.getItem("user");
-            if (sessionUser) {
-                setUser(JSON.parse(sessionUser));
-            }
-            response.json().then((data) => {
-                success
-                    ? navigate(`/co-op-home/${data._id}`)
-                    : alert("Login failed in accept");
+        response.json().then((data) => {
+            handleLogin(email as string, password as string).then((success) => {
+                console.log("coop", success, data);
+                const sessionUser = sessionStorage.getItem("user");
+                if (sessionUser) {
+                    setUser(JSON.parse(sessionUser));
+                }
+                if (!data._id && data.code === 11000) {
+                    alert("Login failed: email already exists");
+                } else {
+                    success
+                        ? navigate(`/co-op-home/${data._id}`)
+                        : alert("Login failed in accept");
+                }
             });
         });
     };
