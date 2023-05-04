@@ -31,22 +31,33 @@ function Accept(): JSX.Element {
                 pet_name: pet_name,
             }),
         });
-        response.json().then((data) => {
-            handleLogin(email as string, password as string).then((success) => {
-                console.log("coop", success, data);
-                const sessionUser = sessionStorage.getItem("user");
-                if (sessionUser) {
-                    setUser(JSON.parse(sessionUser));
-                }
-                if (!data._id && data.code === 11000) {
-                    alert("Login failed: email already exists");
-                } else {
-                    success
-                        ? navigate(`/co-op-home/${data._id}`)
-                        : alert("Login failed in accept");
-                }
+        response
+            .json()
+            .then((data) => {
+                handleLogin(email as string, password as string).then(
+                    (success) => {
+                        console.log("coop", success, data);
+                        const sessionUser = sessionStorage.getItem("user");
+                        if (sessionUser) {
+                            setUser(JSON.parse(sessionUser));
+                        }
+                        if (!data._id && data.code === 11000) {
+                            alert("Login failed: email already exists");
+                        } else if (!data._id) {
+                            alert(
+                                "Login failed: No invite found for this email"
+                            );
+                        } else {
+                            success
+                                ? navigate(`/co-op-home/${data._id}`)
+                                : alert("Login failed in accept");
+                        }
+                    }
+                );
+            })
+            .catch((err) => {
+                alert("Account creation failed: " + err);
             });
-        });
     };
     return (
         <div className={styles.container}>

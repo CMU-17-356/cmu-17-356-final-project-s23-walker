@@ -17,28 +17,24 @@ async function handleLogin(
             email: userEmail,
             password: userPassword,
         }),
-    })
-        .then(async (res) => {
-            const status = res.status;
-            try {
-                const resJson = await res.json();
-                if (status === 200) {
-                    const token = resJson.token as string;
-                    sessionStorage.setItem("token", token);
-                    const userResponse = await getUser(userEmail);
-                    const user = await userResponse.json();
-                    sessionStorage.setItem("user", JSON.stringify(user));
-                    return user.coop_id;
-                } else {
-                    throw new Error("Login failed: " + resJson.message);
-                }
-            } catch (e) {
-                throw new Error("Login failed: " + e);
+    }).then(async (res) => {
+        const status = res.status;
+        try {
+            const resJson = await res.json();
+            if (status === 200) {
+                const token = resJson.token as string;
+                sessionStorage.setItem("token", token);
+                const userResponse = await getUser(userEmail);
+                const user = await userResponse.json();
+                sessionStorage.setItem("user", JSON.stringify(user));
+                return user.coop_id;
+            } else {
+                return undefined;
             }
-        })
-        .catch((err) => {
-            throw new Error(err);
-        });
+        } catch (e) {
+            return undefined;
+        }
+    });
     return login;
 }
 
