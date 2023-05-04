@@ -1,14 +1,15 @@
 import { useContext } from "react";
-
 import { UserContext } from "../App";
+import { useNavigate } from "react-router-dom";
 
 function Logout() {
     const { setUser } = useContext(UserContext);
+    const navigate = useNavigate()
     const handleLogout = () => {
+        navigate('/login')
         sessionStorage.removeItem("token");
         sessionStorage.removeItem("user");
         setUser(null);
-        window.location.reload();
     };
 
     return (

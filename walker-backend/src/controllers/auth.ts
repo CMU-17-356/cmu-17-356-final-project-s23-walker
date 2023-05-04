@@ -52,7 +52,7 @@ class AuthController {
           });
         }
         else {
-          return res.status(200)
+          return res.status(200).send()
         }
       });
     }
