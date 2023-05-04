@@ -55,11 +55,10 @@ class CoOpController {
       const body = req.body;
       const coop = await CoOp.findById(body.coopId);
       const user = await User.findById(body.userId);
-  
+      console.log(`Trying to join coop with coop ${coop?._id} and ${user?._id}`)
       if (coop && user) {
         coop.users.push(user);
         await coop.save();
-  
         return res.status(200).json(`User with email ${user.email} joined co-op successfully.`);
       } else {
         return res.status(500).json(`Co-op or User not found.`);
